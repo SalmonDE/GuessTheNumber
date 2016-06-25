@@ -32,4 +32,8 @@ class Number extends PluginBase implements Listener{
 	
 	public function onChat(PlayerChatEvent $event){
 	}
+	
+	public function givePrize(){
+
+	}
 }
