@@ -1,0 +1,14 @@
+name: GuessTheNumber
+version: 1.0.0
+api: [2.0.0]
+main: SalmonDE\Number
+description: Adds a nice guessing game to your server!
+author: SalmonDE
+website: https://salmonde.de/
+commands:
+ guess:
+  description: Starts a guessing game!
+  permission: guessthenumber
+permissions:
+ guessthenumber:
+  description: Main permission of GuessTheNumber

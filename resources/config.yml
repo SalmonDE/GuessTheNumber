@@ -1,0 +1,5 @@
+#Configuration file of GuessTheNumber!
+Minimum: 1
+Maximum: 100
+
+Prize: ---
