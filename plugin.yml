@@ -9,12 +9,12 @@ commands:
  guess:
   description: Starts a guessing game!
   permission: guessthenumber
- guessquadrat:
+ guessquare:
   description: Starts a harder guessing game!
-  permission: guessthenumber.quadrat
+  permission: guessthenumber.square
 permissions:
  guessthenumber:
   description: Main permission of GuessTheNumber
   children:
-   guessthenumber.quadrat:
-    description: Permission for /guessquadrat
+   guessthenumber.square:
+    description: Permission for /guessquare

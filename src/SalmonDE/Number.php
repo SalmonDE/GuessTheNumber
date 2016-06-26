@@ -29,7 +29,7 @@ class Number extends PluginBase implements Listener{
 		 $sender->sendMessage("Not finished");
 		 $sender->sendMessage((string) $num);
 		 return true;
-		}elseif($cmd == "guessquadrat"){
+		}elseif($cmd == "guessquare"){
 		 $qnum = mt_rand(1,20);
 		 $numq = $qnum * $qnum;
 		 $sender->sendMessage((string) $qnum);
