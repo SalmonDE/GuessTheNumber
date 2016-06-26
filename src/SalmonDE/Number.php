@@ -22,18 +22,24 @@ class Number extends PluginBase implements Listener{
 	    $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getLogger()->info(TF::GREEN."Enabled!");
 	}
-	
+
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
-		$sender->sendMessage("Not finished");
-	    $number = mt_rand(1,100);//To-Do: Make it configurable
-		$sender->sendMessage((string) $number);
-		return true;
+		if($cmd == "guess"){
+		 $num = mt_rand(1,100);//To-Do: Make it configurable
+		 $sender->sendMessage("Not finished");
+		 $sender->sendMessage((string) $num);
+		 return true;
+		}elseif($cmd == "guessquadrat"){
+		 $qnum = mt_rand(1,20);
+		 $numq = $qnum * $qnum;
+		 $sender->sendMessage((string) $qnum);
+		 $sender->sendMessage((string) $numq);
+		}
 	}
-	
+
 	public function onChat(PlayerChatEvent $event){
 	}
-	
-	public function givePrize(){
 
+	public function givePrize(){
 	}
 }
