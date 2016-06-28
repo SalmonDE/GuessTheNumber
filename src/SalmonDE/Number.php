@@ -60,6 +60,7 @@ class Number extends PluginBase implements Listener{
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
+				$this->getServer()->broadcastMessage(TF::RED.'Um mitzumachen, muss deine Chatnachricht nur aus Zahlen bestehen!');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				if($sender->hasPermission('guessthenumber.solution')){
 					$sender->sendMessage(TF::BLUE.'Gesuchte Zahl: '.(string) $num);
@@ -86,6 +87,7 @@ class Number extends PluginBase implements Listener{
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
+				$this->getServer()->broadcastMessage(TF::RED.'Um mitzumachen, muss deine Chatnachricht nur aus Zahlen bestehen!');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				if($sender->hasPermission('guessthenumber.solution')){
 					$sender->sendMessage(TF::BLUE.'Die Quadratzahl von '.(string) $qnum.' ist: '.(string) $numq);
@@ -125,14 +127,11 @@ class Number extends PluginBase implements Listener{
 				    }else{
 					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
 				    }
-			    }else{
-				    $player->sendMessage(TF::RED.'Du musst eine numerische Zahl in den Chat schreiben, damit du beim Quiz mitmachen kannst!');
-					$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
+					$event->setCancelled();
 			    }
-				$event->setCancelled();
-		    }
+			}
 		}
-	}
+    }
 
 	public function onJoin(PlayerJoinEvent $event){
 		$dir = $this->getDataFolder();
