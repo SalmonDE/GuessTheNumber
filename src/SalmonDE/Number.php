@@ -30,22 +30,26 @@ class Number extends PluginBase implements Listener{
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
 		$dir = $this->getDataFolder();
-		$tempfile = fopen($dir.'imbusy.txt','w');
 		if(file_exists($dir.'imbusy.txt')){
 			$sender->sendMessage(TF::RED.'Geblockt! Ratespiel schon im Gange!');
 		}else{
+		    $tempfile = fopen($dir.'imbusy.txt','w');
 		    if($cmd == 'guess'){
+				$min = $this->getConfig()->get('Minimum');
+				$max = $this->getConfig()->get('Maximum');
 		        $status = 1;
 		        $behavior = 5;
-		        $num = mt_rand(1,100);//To-Do: Make it configurable
+		        $num = mt_rand($min,$max);//To-Do: Make it configurable
 		        $store = array(
 		                    'status' => "$status",
 					        'num' => "$num",
 					        'behavior' => "$behavior"
 		        );
 		        fwrite($tempfile,serialize($store));
-		        $sender->sendMessage(TF::AQUA'Nearly finished! :D');
-		        $sender->sendMessage((string) $num);//If $sender->hasPermission for this!
+		        $sender->sendMessage(TF::AQUA.'Nearly finished! :D');
+				if($sender->hasPermission('guessthenumber.solution')){
+					$sender->sendMessage('Gesuchte Zahl: '.(string) $num);
+				}
 		        return true;
 		    }elseif($cmd == 'guessquare'){
 		        $status = 1;
@@ -54,13 +58,14 @@ class Number extends PluginBase implements Listener{
 		        $numq = $qnum * $qnum;
 				$store = array(
 		                    'status' => "$status",
-							'qnum' => "$qnum";
+							'qnum' => "$qnum",
 					        'numq' => "$numq",
 					        'behavior' => "$behavior"
 		        );
 		        fwrite($tempfile,serialize($store));
-		        $sender->sendMessage((string) $qnum);
-		        $sender->sendMessage((string) $numq);//If $sender->hasPermission for this!
+				if($sender->hasPermission('guessthenumber.solution')){
+					$sender->sendMessage('Gesuchte Quadratzahl von '.(string) $qnum.' : '.(string) $numq);
+				}
 		    }
 		}
 	}

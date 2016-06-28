@@ -8,7 +8,7 @@ website: https://salmonde.de/
 commands:
  guess:
   description: Starts a guessing game!
-  permission: guessthenumber
+  permission: guessthenumber.normal
  guessquare:
   description: Starts a harder guessing game!
   permission: guessthenumber.square
@@ -16,5 +16,9 @@ permissions:
  guessthenumber:
   description: Main permission of GuessTheNumber
   children:
+   guessthenumber.normal:
+    description: Permission to use /guess
    guessthenumber.square:
-    description: Permission for /guessquare
+    description: Permission /guessquare
+   guessthenumber.solution:
+    description: Allows the user of the command to see the wanted number of the guessing game
