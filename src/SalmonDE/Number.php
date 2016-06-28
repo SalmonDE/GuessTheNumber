@@ -106,8 +106,10 @@ class Number extends PluginBase implements Listener{
 			    $player = $event->getPlayer();
 			    $message = $event->getMessage();
 			    if(is_numeric($message)){
-					$player->sendMessage(TF::LIGHT_PURPLE.'In 5 Sekunden erfährst du, ob es richtig ist!');
-					sleep(5);
+					//$player->sendMessage(TF::LIGHT_PURPLE.'In 5 Sekunden erfährst du, ob es richtig ist!');
+					//sleep(5);
+					/*Problem with making the whole server sleep lol 
+					solution: own delayed task*/
 				    if($behavior == 5){
 					    if($message == $num){
 							$winner = $player;
