@@ -23,7 +23,7 @@ class Number extends PluginBase implements Listener{
 	private $winner;
 	//Congratulations!
 
-	public function onEnable(){//Should save an imbusy.txt file to prevent errors
+	public function onEnable(){//Should delete the last imbusy.txt file to prevent errors
 	    @mkdir($this->getDataFolder());
 	    $this->saveResource("config.yml");
 	    $this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -59,9 +59,26 @@ class Number extends PluginBase implements Listener{
 		$player = $event->getPlayer();
 		$file = file_get_contents('imbusy.txt');
 		$getinfo = unserialize($file);
-		extract($info);//Get the information better
-		if($status === 1){
-			$player->sendMessage("Guessing is activated!");
+		extract($getinfo);
+		if($status == 1){
+			$message = $event->getMessage();
+			if(is_numeric($message)){
+				if($behavior == 5){
+					if($message == $num){
+						
+					}else{
+						
+					}
+				}elseif($behavior == 1350){
+					if($message == $qnum){
+						
+					}
+				}else{
+					$this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
+				}
+			}else{
+				$player->sendMessage('Du musst nur eine numerische Zahl in den Chat schreiben, um beim Ratespiel mitzumachen!');//ToDo: Language file
+			}
 		}
 	}
 
