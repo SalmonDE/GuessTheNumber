@@ -123,7 +123,7 @@ class Number extends PluginBase implements Listener{
 					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
 				    }
 			    }else{
-				    $player->sendMessage(TF::RED.'Du musst nur eine numerische Zahl in den Chat schreiben, um beim Ratespiel mitzumachen!');//ToDo: Language file
+				    $player->sendMessage(TF::RED.'Du musst eine numerische Zahl in den Chat schreiben, damit du beim Quiz mitmachen kannst!');//ToDo: Language file
 					$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
 			    }
 				$event->setCancelled();
