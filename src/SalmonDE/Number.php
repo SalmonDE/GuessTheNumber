@@ -194,7 +194,7 @@ class Number extends PluginBase implements Listener{
 			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die Quadratzahl von§9 $qnum §6ist§b $numq"."§d.");
 			$item = $this->getConfig()->get('SquareItem');
 			$data = explode(':', "$item");
-			$itemname = $this->Item->get($data[0])->getName();
+			$itemname = Item::get($data[0])->getName();
 			$winner->getInventory()->addItem(new Item($data[0], $data[1], $data[2]));
 		    $winner->sendMessage(TF::LIGHT_PURPLE.TF::BOLD."Du hast $data[2] mal $itemname gewonnen!");
 		}
