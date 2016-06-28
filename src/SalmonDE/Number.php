@@ -16,9 +16,10 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as TF;
 
 class Number extends PluginBase implements Listener{
+
 	private $winner;
 
-	public function onEnable(){//Should delete the last imbusy.txt file to prevent errors
+	public function onEnable(){
 	    @mkdir($this->getDataFolder());
 		$dir = $this->getDataFolder();
 		if(file_exists($dir.'imbusy.txt')){
@@ -41,7 +42,7 @@ class Number extends PluginBase implements Listener{
 				$max = $this->getConfig()->get('Maximum');
 		        $status = 1;
 		        $behavior = 5;
-		        $num = mt_rand($min,$max);//To-Do: Make it configurable
+		        $num = mt_rand($min,$max);
 		        $store = array(
 		                    'status' => "$status",
 					        'num' => "$num",
@@ -101,8 +102,8 @@ class Number extends PluginBase implements Listener{
 			    $player = $event->getPlayer();
 			    $message = $event->getMessage();
 			    if(is_numeric($message)){
-					$player->sendMessage(TF::LIGHT_PURPLE.'In 2 Sekunden erfährst du, ob es richtig ist!');//Configurable
-					sleep(2);//Configurable
+					$player->sendMessage(TF::LIGHT_PURPLE.'In 5 Sekunden erfährst du, ob es richtig ist!');
+					sleep(5);
 				    if($behavior == 5){
 					    if($message == $num){
 							$winner = $player;
@@ -123,7 +124,7 @@ class Number extends PluginBase implements Listener{
 					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
 				    }
 			    }else{
-				    $player->sendMessage(TF::RED.'Du musst eine numerische Zahl in den Chat schreiben, damit du beim Quiz mitmachen kannst!');//ToDo: Language file
+				    $player->sendMessage(TF::RED.'Du musst eine numerische Zahl in den Chat schreiben, damit du beim Quiz mitmachen kannst!');
 					$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
 			    }
 				$event->setCancelled();
