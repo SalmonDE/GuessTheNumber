@@ -182,9 +182,9 @@ class Number extends PluginBase implements Listener{
 			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die gesuchte Zahl war:§b $num"."§d.");
 			$item = $this->getConfig()->get('Item');
 			$data = explode(':', $item);
-			$itemname = $data[0]->Item->getName();
+			$itemname = Item::get($data[0])->getName();
 			$winner->getInventory()->addItem(new Item($data[0], $data[1], $data[2]));
-		    $winner->sendMessage(TF::GREEN.TF::BOLD."Du hast $data[2] mal $data[0] gewonnen!");
+		    $winner->sendMessage(TF::GREEN.TF::BOLD."Du hast $data[2] mal $itemname gewonnen!");
 		}elseif($behavior == 1350){
 			foreach($this->getServer()->getOnlinePlayers() as $players){
 				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
@@ -196,7 +196,7 @@ class Number extends PluginBase implements Listener{
 			$data = explode(':', "$item");
 			$itemname = $this->Item->get($data[0])->getName();
 			$winner->getInventory()->addItem(new Item($data[0], $data[1], $data[2]));
-		    $winner->sendMessage(TF::LIGHT_PURPLE.TF::BOLD."Du hast $data[2] mal $data[0] gewonnen!");
+		    $winner->sendMessage(TF::LIGHT_PURPLE.TF::BOLD."Du hast $data[2] mal $itemname gewonnen!");
 		}
 	}
 
