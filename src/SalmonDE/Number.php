@@ -31,7 +31,8 @@ class Number extends PluginBase implements Listener{
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
-		$tempfile = fopen('imbusy.txt','w');
+		$dir = $this->getDataFolder();
+		$tempfile = fopen($dir.'imbusy.txt','w');
 		if($cmd == "guess"){
 		 $status = 1;
 		 $behavior = 5;
@@ -56,11 +57,12 @@ class Number extends PluginBase implements Listener{
 	}
 
 	public function onChat(PlayerChatEvent $event){
-		$player = $event->getPlayer();
-		$file = file_get_contents('imbusy.txt');
+		$dir = $this->getDataFolder();
+		$file = file_get_contents($dir.'imbusy.txt');
 		$getinfo = unserialize($file);
 		extract($getinfo);
 		if($status == 1){
+			$player = $event->getPlayer();
 			$message = $event->getMessage();
 			if(is_numeric($message)){
 				if($behavior == 5){
