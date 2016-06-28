@@ -34,7 +34,7 @@ class Number extends PluginBase implements Listener{
 			$sender->sendMessage(TF::RED.'Geblockt! Ratespiel schon im Gange!');
 		}else{
 		    $tempfile = fopen($dir.'imbusy.txt','w');
-		    if($cmd == 'guess'){
+		    if($cmd == 'guessgame' || $cmd == 'Guessgame'){
 				$min = $this->getConfig()->get('Minimum');
 				$max = $this->getConfig()->get('Maximum');
 		        $status = 1;
@@ -46,12 +46,17 @@ class Number extends PluginBase implements Listener{
 					        'behavior' => "$behavior"
 		        );
 		        fwrite($tempfile,serialize($store));
-		        $sender->sendMessage(TF::AQUA.'Nearly finished! :D');
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'Schreibe in den Chat eine');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD."Zahl zwischen§d $min §bund§d $max".'§b,');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wenn es die Zahl ist, die gesucht');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
 				if($sender->hasPermission('guessthenumber.solution')){
-					$sender->sendMessage('Gesuchte Zahl: '.(string) $num);
+					$sender->sendMessage(TF::BLUE.'Gesuchte Zahl: '.(string) $num);
 				}
 		        return true;
-		    }elseif($cmd == 'guessquare'){
+		    }elseif($cmd == 'guessgamesquare' || $cmd == 'Guessgamesquare'){
 		        $status = 1;
 		        $behavior = 1350;
 		        $qnum = mt_rand(1,20);
@@ -62,9 +67,15 @@ class Number extends PluginBase implements Listener{
 					        'numq' => "$numq",
 					        'behavior' => "$behavior"
 		        );
-		        fwrite($tempfile,serialize($store));
+				fwrite($tempfile,serialize($store));
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'Schreibe in den Chat die');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD."Quadratzahl von $qnum".'§b,');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wenn es die Zahl ist, die gesucht');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
 				if($sender->hasPermission('guessthenumber.solution')){
-					$sender->sendMessage('Gesuchte Quadratzahl von '.(string) $qnum.' : '.(string) $numq);
+					$sender->sendMessage(TF::BLUE.'Gesuchte Quadratzahl von '.(string) $qnum.' : '.(string) $numq);
 				}
 		    }
 		}
@@ -80,7 +91,7 @@ class Number extends PluginBase implements Listener{
 			    $player = $event->getPlayer();
 			    $message = $event->getMessage();
 			    if(is_numeric($message)){
-					$player->sendMessage('In 2 Sekunden erfährst du, ob es richtig ist!');//Configurable
+					$player->sendMessage(TF::LIGHT_PURPLE.'In 2 Sekunden erfährst du, ob es richtig ist!');//Configurable
 					sleep(2);//Configurable
 				    if($behavior == 5){
 					    if($message == $num){
@@ -91,8 +102,8 @@ class Number extends PluginBase implements Listener{
 						    $player->sendMessage(TF::GOLD.'Leider ist dies nicht die gesuchte Zahl! ;(');
 					    }
 				    }elseif($behavior == 1350){
-					    if($message == $qnum){
-							$player->sendMessage(TF::GREEN.TF::BOLD.'Herzlichen Glückwunsch! Du hast gewonnen!');
+					    if($message == $numq){
+							$player->sendMessage(TF::GREEN.'Du hast gewonnen!');
 							$winner = $player;
 							$this->givePrize($winner);
 					    }else{
@@ -102,8 +113,9 @@ class Number extends PluginBase implements Listener{
 					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
 				    }
 			    }else{
-				    $player->sendMessage('Du musst nur eine numerische Zahl in den Chat schreiben, um beim Ratespiel mitzumachen!');//ToDo: Language file
+				    $player->sendMessage(TF::RED.'Du musst nur eine numerische Zahl in den Chat schreiben, um beim Ratespiel mitzumachen!');//ToDo: Language file
 			    }
+				$event->setCancelled();
 		    }
 		}
 	}
@@ -116,11 +128,11 @@ class Number extends PluginBase implements Listener{
 		unlink($dir.'imbusy.txt');
 		$name = $winner->getDisplayName();
 		if($behavior == 5){
-			$winner->sendMessage("Herzlichen Glückwunsch, $name!");
-			$winner->sendMessage("Die gesuchte Zahl war: $num");
+			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD."Herzlichen Glückwunsch, $name!");
+			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die gesuchte Zahl war:§b $num"."§d.");
 		}elseif($behavior == 1350){
-			$winner->sendMessage("Herzlichen Glückwunsch, $name!");
-			$winner->sendMessage("Die gesuchte Quadratzahl von $qnum war $numq");
+			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD."Herzlichen Glückwunsch, $name!");
+			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die gesuchte Quadratzahl von§9 $qnum war§b $numq"."§d.");
 		}
 	}
 	

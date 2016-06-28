@@ -6,10 +6,10 @@ description: Adds a nice guessing game to your server!
 author: SalmonDE
 website: https://salmonde.de/
 commands:
- guess:
+ guessgame:
   description: Starts a guessing game!
   permission: guessthenumber.normal
- guessquare:
+ guessgamesquare:
   description: Starts a harder guessing game!
   permission: guessthenumber.square
 permissions:
@@ -17,8 +17,8 @@ permissions:
   description: Main permission of GuessTheNumber
   children:
    guessthenumber.normal:
-    description: Permission to use /guess
+    description: Permission to use /guessgame
    guessthenumber.square:
-    description: Permission /guessquare
+    description: Permission /guessgamesquare
    guessthenumber.solution:
     description: Allows the user of the command to see the wanted number of the guessing game
