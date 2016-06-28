@@ -7,6 +7,8 @@ use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
+use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\item\Item;
 use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\level\sound\FizzSound;
 use pocketmine\nbt\tag\StringTag;
@@ -49,16 +51,16 @@ class Number extends PluginBase implements Listener{
 					        'behavior' => "$behavior"
 		        );
 		        fwrite($tempfile,serialize($store));
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'Schreibe in den Chat eine');
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD."Zahl zwischen§d $min §bund§d $max".'§b,');
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wenn es die Zahl ist, die gesucht');
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				if($sender->hasPermission('guessthenumber.solution')){
 					$sender->sendMessage(TF::BLUE.'Gesuchte Zahl: '.(string) $num);
 				}
@@ -75,16 +77,16 @@ class Number extends PluginBase implements Listener{
 					        'behavior' => "$behavior"
 		        );
 				fwrite($tempfile,serialize($store));
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'Schreibe in den Chat die');
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD."Quadratzahl von $qnum".'§b,');
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD."Quadratzahl von§d $qnum".'§b,');
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wenn es die Zahl ist, die gesucht');
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'\n');
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
+				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				if($sender->hasPermission('guessthenumber.solution')){
 					$sender->sendMessage(TF::BLUE.'Die Quadratzahl von '.(string) $qnum.' ist: '.(string) $numq);
 				}
@@ -114,11 +116,11 @@ class Number extends PluginBase implements Listener{
 					    }
 				    }elseif($behavior == 1350){
 					    if($message == $numq){
-							$player->sendMessage(TF::GREEN.'Du hast gewonnen!');
 							$winner = $player;
 							$this->givePrize($winner);
 					    }else{
 							$player->sendMessage(TF::GOLD.'Leider ist dies nicht die gesuchte Zahl! ;(');
+							$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
 						}
 				    }else{
 					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
@@ -132,31 +134,72 @@ class Number extends PluginBase implements Listener{
 		}
 	}
 
+	public function onJoin(PlayerJoinEvent $event){
+		$dir = $this->getDataFolder();
+		if(file_exists($dir.'imbusy.txt')){
+		    $file = file_get_contents($dir.'imbusy.txt');
+		    $getinfo = unserialize($file);
+		    extract($getinfo);
+			$player = $event->getPlayer();
+			if($behavior = 5){
+				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
+				$player->sendMessage(TF::AQUA.TF::BOLD.'Schreibe in den Chat eine');
+				$player->sendMessage(TF::AQUA.TF::BOLD."Zahl zwischen§d $min §bund§d $max".'§b,');
+				$player->sendMessage(TF::AQUA.TF::BOLD.'wenn es die Zahl ist, die gesucht');
+				$player->sendMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
+				$player->sendMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
+                $player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+			}elseif($behavior = 1350){
+				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
+				$player->sendMessage(TF::AQUA.TF::BOLD.'Schreibe in den Chat die');
+				$player->sendMessage(TF::AQUA.TF::BOLD."Quadratzahl von§d $qnum".'§b,');
+				$player->sendMessage(TF::AQUA.TF::BOLD.'wenn es die Zahl ist, die gesucht');
+				$player->sendMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
+				$player->sendMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
+                $player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+			}
+		}
+	}
+
 	public function givePrize($winner){
 		$dir = $this->getDataFolder();
 		$file = file_get_contents($dir.'imbusy.txt');
 		$getinfo = unserialize($file);
 		extract($getinfo);
 		$name = $winner->getDisplayName();
-		sleep(1);
-		$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Das Quiz ist vorbei ...");
-		sleep(4);
-		unlink($dir.'imbusy.txt');
 		if($behavior == 5){
 			foreach($this->getServer()->getOnlinePlayers() as $players){
 				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
 			}
+			unlink($dir.'imbusy.txt');
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD."Herzlichen Glückwunsch, $name!\n");
 			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die gesuchte Zahl war:§b $num"."§d.");
+			$item = $this->getConfig()->get('Item');
+			$data = explode(':', $item);
+			$itemname = $data[0]->Item->getName();
+			$winner->getInventory()->addItem(new Item($data[0], $data[1], $data[2]));
+		    $winner->sendMessage(TF::GREEN.TF::BOLD."Du hast $data[2] mal $data[0] gewonnen!");
 		}elseif($behavior == 1350){
 			foreach($this->getServer()->getOnlinePlayers() as $players){
 				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
 			}
+			unlink($dir.'imbusy.txt');
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD."Herzlichen Glückwunsch, $name!");
-			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die gesuchte Quadratzahl von§9 $qnum war§b $numq"."§d.");
+			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die Quadratzahl von§9 $qnum §6ist§b $numq"."§d.");
+			$item = $this->getConfig()->get('SquareItem');
+			$data = explode(':', "$item");
+			$itemname = $this->Item->get($data[0])->getName();
+			$winner->getInventory()->addItem(new Item($data[0], $data[1], $data[2]));
+		    $winner->sendMessage(TF::LIGHT_PURPLE.TF::BOLD."Du hast $data[2] mal $data[0] gewonnen!");
 		}
 	}
-	
+
 	public function onDisable(){
 		$dir = $this->getDataFolder();
 		if(file_exists($dir.'imbusy.txt')){
