@@ -15,18 +15,17 @@ use pocketmine\utils\TextFormat as TF;
 
 class Number extends PluginBase implements Listener{
 	private $winner;
-	//Congratulations!
 
 	public function onEnable(){//Should delete the last imbusy.txt file to prevent errors
 	    @mkdir($this->getDataFolder());
 		$dir = $this->getDataFolder();
 		if(file_exists($dir.'imbusy.txt')){
 			unlink($dir.'imbusy.txt');
-			$this->getLogger()->debug("Deleted temp file!");
+			$this->getLogger()->debug('Deleted temp file!');
 		}
-	    $this->saveResource("config.yml");
+	    $this->saveResource('config.yml');
 	    $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        $this->getLogger()->info(TF::GREEN."Enabled!");
+        $this->getLogger()->info(TF::GREEN.'Enabled!');
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
@@ -35,7 +34,7 @@ class Number extends PluginBase implements Listener{
 		if(file_exists($dir.'imbusy.txt')){
 			$sender->sendMessage(TF::RED.'Geblockt! Ratespiel schon im Gange!');
 		}else{
-		    if($cmd == "guess"){
+		    if($cmd == 'guess'){
 		        $status = 1;
 		        $behavior = 5;
 		        $num = mt_rand(1,100);//To-Do: Make it configurable
@@ -45,10 +44,10 @@ class Number extends PluginBase implements Listener{
 					        'behavior' => "$behavior"
 		        );
 		        fwrite($tempfile,serialize($store));
-		        $sender->sendMessage("Not finished");
+		        $sender->sendMessage(TF::AQUA'Nearly finished! :D');
 		        $sender->sendMessage((string) $num);//If $sender->hasPermission for this!
 		        return true;
-		    }elseif($cmd == "guessquare"){
+		    }elseif($cmd == 'guessquare'){
 		        $status = 1;
 		        $behavior = 1350;
 		        $qnum = mt_rand(1,20);
@@ -68,7 +67,7 @@ class Number extends PluginBase implements Listener{
 
 	public function onChat(PlayerChatEvent $event){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir."imbusy.txt")){
+		if(file_exists($dir.'imbusy.txt')){
 		    $file = file_get_contents($dir.'imbusy.txt');
 		    $getinfo = unserialize($file);
 		    extract($getinfo);
@@ -109,7 +108,7 @@ class Number extends PluginBase implements Listener{
 		$file = file_get_contents($dir.'imbusy.txt');
 		$getinfo = unserialize($file);
 		extract($getinfo);
-		unlink($dir."imbusy.txt");
+		unlink($dir.'imbusy.txt');
 		$name = $winner->getDisplayName();
 		if($behavior == 5){
 			$winner->sendMessage("Herzlichen Glückwunsch, $name!");
@@ -122,10 +121,10 @@ class Number extends PluginBase implements Listener{
 	
 	public function onDisable(){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir."imbusy.txt")){
-			unlink($dir."imbusy.txt");
-			$this->getLogger()->debug("Deleted temp file!");
+		if(file_exists($dir.'imbusy.txt')){
+			unlink($dir.'imbusy.txt');
+			$this->getLogger()->debug('Deleted temp file!');
 		}
-		$this->getLogger()->info("Disabled!");
+		$this->getLogger()->info('Disabled!');
 	}
 }
