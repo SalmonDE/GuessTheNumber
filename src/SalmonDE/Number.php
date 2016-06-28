@@ -25,6 +25,11 @@ class Number extends PluginBase implements Listener{
 
 	public function onEnable(){//Should delete the last imbusy.txt file to prevent errors
 	    @mkdir($this->getDataFolder());
+		$dir = $this->getDataFolder();
+		if(file_exists($dir."imbusy.txt")){
+			unlink($dir."imbusy.txt");
+			$this->getLogger()->debug("Deleted temp file!");
+		}
 	    $this->saveResource("config.yml");
 	    $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->getLogger()->info(TF::GREEN."Enabled!");
@@ -58,32 +63,43 @@ class Number extends PluginBase implements Listener{
 
 	public function onChat(PlayerChatEvent $event){
 		$dir = $this->getDataFolder();
-		$file = file_get_contents($dir.'imbusy.txt');
-		$getinfo = unserialize($file);
-		extract($getinfo);
-		if($status == 1){
-			$player = $event->getPlayer();
-			$message = $event->getMessage();
-			if(is_numeric($message)){
-				if($behavior == 5){
-					if($message == $num){
+		if(file_exists($dir."imbusy.txt")){
+		    $file = file_get_contents($dir.'imbusy.txt');
+		    $getinfo = unserialize($file);
+		    extract($getinfo);
+		    if($status == 1){
+			    $player = $event->getPlayer();
+			    $message = $event->getMessage();
+			    if(is_numeric($message)){
+				    if($behavior == 5){
+					    if($message == $num){
 						
-					}else{
+					    }else{
 						
-					}
-				}elseif($behavior == 1350){
-					if($message == $qnum){
+					    }
+				    }elseif($behavior == 1350){
+					    if($message == $qnum){
 						
-					}
-				}else{
-					$this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
-				}
-			}else{
+					    }
+				    }else{
+					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
+				    }
+			    }else{
 				$player->sendMessage('Du musst nur eine numerische Zahl in den Chat schreiben, um beim Ratespiel mitzumachen!');//ToDo: Language file
-			}
+			    }
+		    }
 		}
 	}
 
 	public function givePrize(){
+	}
+	
+	public function onDisable(){
+		$dir = $this->getDataFolder();
+		if(file_exists($dir."imbusy.txt")){
+			unlink($dir."imbusy.txt");
+			$this->getLogger()->debug("Deleted temp file!");
+		}
+		$this->getLogger()->info("Disabled!");
 	}
 }
