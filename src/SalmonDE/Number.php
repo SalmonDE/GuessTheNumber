@@ -35,7 +35,20 @@ class Number extends PluginBase implements Listener{
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'imbusy.txt')){
+		if($cmd == 'guessgamesolution' || $cmd == 'Guessgamesolution'){
+            if($sender->hasPermission('guessthenumber.solution')){
+				if(file_exists($dir.'imbusy.txt')){
+				    $file = file_get_contents($dir.'imbusy.txt');
+		            $getinfo = unserialize($file);
+		            extract($getinfo);
+				    if($behavior == 5){
+					    $sender->sendMessage(TF::BLUE.'Gesuchte Zahl: '.(string) $num);
+				    }elseif($behavior == 1350){
+					    $sender->sendMessage(TF::BLUE.'Die Quadratzahl von '.(string) $qnum.' ist: '.(string) $numq);
+				    }
+				}
+			}
+		}elseif(file_exists($dir.'imbusy.txt')){
 			$sender->sendMessage(TF::RED.'Geblockt! Ratespiel schon im Gange!');
 		}else{
 		    $tempfile = fopen($dir.'imbusy.txt','w');
@@ -61,10 +74,6 @@ class Number extends PluginBase implements Listener{
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				$this->getServer()->broadcastMessage(TF::RED.'Um mitzumachen, muss deine Chatnachricht nur aus Zahlen bestehen!');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
-				if($sender->hasPermission('guessthenumber.solution')){
-					$sender->sendMessage(TF::BLUE.'Gesuchte Zahl: '.(string) $num);
-				}
 		        return true;
 		    }elseif($cmd == 'guessgamesquare' || $cmd == 'Guessgamesquare'){
 		        $status = 1;
@@ -88,10 +97,6 @@ class Number extends PluginBase implements Listener{
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				$this->getServer()->broadcastMessage(TF::RED.'Um mitzumachen, muss deine Chatnachricht nur aus Zahlen bestehen!');
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
-				if($sender->hasPermission('guessthenumber.solution')){
-					$sender->sendMessage(TF::BLUE.'Die Quadratzahl von '.(string) $qnum.' ist: '.(string) $numq);
-				}
 		    }
 		}
 	}
@@ -152,7 +157,7 @@ class Number extends PluginBase implements Listener{
 				$player->sendMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
 				$player->sendMessage(TF::GOLD.TF::BOLD.'*-------Zahlenquiz-------*');
                 $player->sendMessage(TF::GOLD.TF::BOLD."\n");
-				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::RED.'Um mitzumachen, muss deine Chatnachricht nur aus Zahlen bestehen!');
 			}elseif($behavior = 1350){
 				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
 				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
@@ -163,7 +168,7 @@ class Number extends PluginBase implements Listener{
 				$player->sendMessage(TF::AQUA.TF::BOLD.'wird, gewinnst du etwas! :D');
 				$player->sendMessage(TF::GOLD.TF::BOLD.'*---Quadratzahlenquiz---*');
                 $player->sendMessage(TF::GOLD.TF::BOLD."\n");
-				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				$player->sendMessage(TF::RED.'Um mitzumachen, muss deine Chatnachricht nur aus Zahlen bestehen!');
 			}
 		}
 	}

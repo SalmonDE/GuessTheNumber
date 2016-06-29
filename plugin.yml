@@ -12,6 +12,9 @@ commands:
  guessgamesquare:
   description: Starts a harder guessing game!
   permission: guessthenumber.square
+ guessgamesolution:
+  description: Shows the player the solution of the current task
+  permission: guessthenumber.solution
 permissions:
  guessthenumber:
   description: Main permission of GuessTheNumber
