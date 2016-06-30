@@ -24,8 +24,8 @@ class Number extends PluginBase implements Listener{
 	public function onEnable(){
 	    @mkdir($this->getDataFolder());
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'imbusy.txt')){
-			unlink($dir.'imbusy.txt');
+		if(file_exists($dir.'currentgame.txt')){
+			unlink($dir.'currentgame.txt');
 			$this->getLogger()->debug('Deleted temp file!');
 		}
 	    $this->saveResource('config.yml');
@@ -37,8 +37,8 @@ class Number extends PluginBase implements Listener{
 		$dir = $this->getDataFolder();
 		if($cmd == 'guessgamesolution' || $cmd == 'Guessgamesolution'){
             if($sender->hasPermission('guessthenumber.solution')){
-				if(file_exists($dir.'imbusy.txt')){
-				    $file = file_get_contents($dir.'imbusy.txt');
+				if(file_exists($dir.'currentgame.txt')){
+				    $file = file_get_contents($dir.'currentgame.txt');
 		            $getinfo = unserialize($file);
 		            extract($getinfo);
 				    if($behavior == 5){
@@ -50,8 +50,8 @@ class Number extends PluginBase implements Listener{
 			}
 		}elseif($cmd == 'guessgameabort' || $cmd == 'Guessgameabort'){
 				if($sender->hasPermission('guessthenumber.abort')){
-					if(file_exists($dir.'imbusy.txt')){
-					    unlink($dir.'imbusy.txt');
+					if(file_exists($dir.'currentgame.txt')){
+					    unlink($dir.'currentgame.txt');
 				        $this->getServer()->broadcastMessage(TF::RED.TF::BOLD.'Das Quiz wurde abgebrochen!');
 						return true;
 					}else{
@@ -62,10 +62,10 @@ class Number extends PluginBase implements Listener{
 					$sender->sendMessage(TF::GOLD.'Das darfst du nicht!');
 					return true;
 				}
-		}elseif(file_exists($dir.'imbusy.txt')){
+		}elseif(file_exists($dir.'currentgame.txt')){
 			$sender->sendMessage(TF::RED.'Geblockt! Ratespiel schon im Gange!');
 		}else{
-		    $tempfile = fopen($dir.'imbusy.txt','w');
+		    $tempfile = fopen($dir.'currentgame.txt','w');
 		    if($cmd == 'guessgame' || $cmd == 'Guessgame'){
 				$min = $this->getConfig()->get('Minimum');
 				$max = $this->getConfig()->get('Maximum');
@@ -117,8 +117,8 @@ class Number extends PluginBase implements Listener{
 
 	public function onChat(PlayerChatEvent $event){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'imbusy.txt')){
-		    $file = file_get_contents($dir.'imbusy.txt');
+		if(file_exists($dir.'currentgame.txt')){
+		    $file = file_get_contents($dir.'currentgame.txt');
 		    $getinfo = unserialize($file);
 		    extract($getinfo);
 		    if($status == 1){
@@ -156,8 +156,8 @@ class Number extends PluginBase implements Listener{
 
 	public function onJoin(PlayerJoinEvent $event){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'imbusy.txt')){
-		    $file = file_get_contents($dir.'imbusy.txt');
+		if(file_exists($dir.'currentgame.txt')){
+		    $file = file_get_contents($dir.'currentgame.txt');
 		    $getinfo = unserialize($file);
 		    extract($getinfo);
 			$player = $event->getPlayer();
@@ -189,7 +189,7 @@ class Number extends PluginBase implements Listener{
 
 	public function givePrize($winner){
 		$dir = $this->getDataFolder();
-		$file = file_get_contents($dir.'imbusy.txt');
+		$file = file_get_contents($dir.'currentgame.txt');
 		$getinfo = unserialize($file);
 		extract($getinfo);
 		$name = $winner->getDisplayName();
@@ -197,7 +197,7 @@ class Number extends PluginBase implements Listener{
 			foreach($this->getServer()->getOnlinePlayers() as $players){
 				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
 			}
-			unlink($dir.'imbusy.txt');
+			unlink($dir.'currentgame.txt');
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD."Herzlichen Glückwunsch, $name!\n");
 			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die gesuchte Zahl war:§b $num"."§d.");
 			$item = $this->getConfig()->get('Item');
@@ -209,7 +209,7 @@ class Number extends PluginBase implements Listener{
 			foreach($this->getServer()->getOnlinePlayers() as $players){
 				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
 			}
-			unlink($dir.'imbusy.txt');
+			unlink($dir.'currentgame.txt');
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD."Herzlichen Glückwunsch, $name!");
 			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."Die Quadratzahl von§9 $qnum §6ist§b $numq"."§d.");
 			$item = $this->getConfig()->get('SquareItem');
@@ -222,8 +222,8 @@ class Number extends PluginBase implements Listener{
 
 	public function onDisable(){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'imbusy.txt')){
-			unlink($dir.'imbusy.txt');
+		if(file_exists($dir.'currentgame.txt')){
+			unlink($dir.'currentgame.txt');
 			$this->getLogger()->debug('Deleted temp file!');
 		}
 		$this->getLogger()->info('Disabled!');
