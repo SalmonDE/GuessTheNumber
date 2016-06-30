@@ -48,6 +48,20 @@ class Number extends PluginBase implements Listener{
 				    }
 				}
 			}
+		}elseif($cmd == 'guessgameabort' || $cmd == 'Guessgameabort'){
+				if($sender->hasPermission('guessthenumber.abort')){
+					if(file_exists($dir.'imbusy.txt')){
+					    unlink($dir.'imbusy.txt');
+				        $this->getServer()->broadcastMessage(TF::RED.TF::BOLD.'Das Quiz wurde abgebrochen!');
+						return true;
+					}else{
+						$sender->sendMessage(TF::GOLD.'Momentan ist kein Quiz aktiv');
+						return true;
+					}
+				}else{
+					$sender->sendMessage(TF::GOLD.'Das darfst du nicht!');
+					return true;
+				}
 		}elseif(file_exists($dir.'imbusy.txt')){
 			$sender->sendMessage(TF::RED.'Geblockt! Ratespiel schon im Gange!');
 		}else{

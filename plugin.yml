@@ -15,6 +15,9 @@ commands:
  guessgamesolution:
   description: Shows the player the solution of the current task
   permission: guessthenumber.solution
+ guessgameabort:
+  description: Aborts a guessing game
+  permission: guessthenumber.abort
 permissions:
  guessthenumber:
   description: Main permission of GuessTheNumber
@@ -25,3 +28,5 @@ permissions:
     description: Permission /guessgamesquare
    guessthenumber.solution:
     description: Allows the user of the command to see the wanted number of the guessing game
+   guessthenumber.abort:
+    description: Permission to abort a guessing game
