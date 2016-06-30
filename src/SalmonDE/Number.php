@@ -19,7 +19,7 @@ use pocketmine\utils\TextFormat as TF;
 
 class Number extends PluginBase implements Listener{
 
-	private $winner;
+	protected $winner;
 
 	public function onEnable(){
 	    @mkdir($this->getDataFolder());
@@ -117,6 +117,8 @@ class Number extends PluginBase implements Listener{
 
 	public function onChat(PlayerChatEvent $event){
 		$dir = $this->getDataFolder();
+		$min = $this->getConfig()->get('Minimum');
+		$max = $this->getConfig()->get('Maximum');
 		if(file_exists($dir.'currentgame.txt')){
 		    $file = file_get_contents($dir.'currentgame.txt');
 		    $getinfo = unserialize($file);
@@ -133,7 +135,9 @@ class Number extends PluginBase implements Listener{
 					    if($message == $num){
 							$winner = $player;
 							$this->givePrize($winner);
-					    }else{
+					    }elseif($message > $max){
+							$player->sendMessage(TF::RED.'Diese Zahl ist zu hoch! Das Quiz benutzt die Zahlen zwischen '.TF::LIGHT_PURPLE.$min.TF::RED.' und '.TF::LIGHT_PURPLE.$max);
+						}else{
 						    $player->sendMessage(TF::GOLD.'Leider ist dies nicht die gesuchte Zahl! ;(');
 							$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
 					    }
