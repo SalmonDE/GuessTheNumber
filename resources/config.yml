@@ -3,12 +3,10 @@ Minimum: 1
 Maximum: 100
 # Prize which the winner gets for a '/guessgame' quiz (normal)
 Item: "265:0:10"
-# 265:0:10
-# ID|Damage|Amount
+# Example: 265:0:10 // ID:Damage:Amount
 # Prize which the winner gets for a '/guessgamesquare' quiz (squares)
 SquareItem: "322:0:1"
 
 # Report bugs here: https://github.com/SalmonCraftPE/GuessTheNumber/issues
-#
-# Have a good time with this plugin! :)
+# Have fun with this plugin! :)
 # ~ SalmonDE
