@@ -1,3 +1,4 @@
 <?php
-# Language: Deutsche
+#$StartMessage = "wurde aktiviert!";
+#$DisableMessage = "wurde deaktiviert!";
 ?>
