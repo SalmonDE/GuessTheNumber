@@ -2,18 +2,18 @@ name: GuessTheNumber
 version: 1.1.1
 api: [2.0.0]
 main: SalmonDE\Number
-description: Adds a nice guessing game to your server!
+description: Guessing game for your Server!
 author: SalmonDE
 website: https://salmonde.de/
 commands:
  guessgame:
-  description: Starts a guessing game!
+  description: Starts a normal guessing game!
   permission: guessthenumber.normal
  guessgamesquare:
-  description: Starts a harder guessing game!
+  description: Starts an advanced guessing game!
   permission: guessthenumber.square
  guessgamesolution:
-  description: Shows the player the solution of the current task
+  description: Shows user the solution of the current task
   permission: guessthenumber.solution
  guessgameabort:
   description: Aborts a guessing game
