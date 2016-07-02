@@ -26,11 +26,14 @@ class Number extends PluginBase implements Listener{
 		$dir = $this->getDataFolder();
 		if(file_exists($dir.'currentgame.txt')){
 			unlink($dir.'currentgame.txt');
-			$this->getLogger()->debug('Deleted temp file!');
+			$this->getLogger()->debug('Temp file Deleted!');
 		}
 	    $this->saveResource('config.yml');
-	    $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        $this->getLogger()->info(TF::GREEN.'Enabled!');
+		$lang = $this->getConfig()->get("Language");
+		$this->saveResource($lang.".php");
+		include($this->getDataFolder().$lang.".php");
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+        $this->getLogger()->info(TF::GREEN.'$StartMessage!');
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
@@ -228,8 +231,10 @@ class Number extends PluginBase implements Listener{
 		$dir = $this->getDataFolder();
 		if(file_exists($dir.'currentgame.txt')){
 			unlink($dir.'currentgame.txt');
-			$this->getLogger()->debug('Deleted temp file!');
+			$this->getLogger()->debug('Temp file Deleted!');
 		}
-		$this->getLogger()->info('Disabled!');
+		$lang = $this->getConfig()->get("Language");
+		include($this->getDataFolder().$lang.".php");
+		$this->getLogger()->info('$DisabledMessage');
 	}
 }
