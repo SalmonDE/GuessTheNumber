@@ -1,4 +1,9 @@
 # Configuration file of GuessTheNumber!
+
+# Languages available:
+# eng (English), deu (Deutsch)
+Language: eng
+#
 Minimum: 1
 Maximum: 100
 # Prize which the winner gets for a '/guessgame' quiz (normal)
