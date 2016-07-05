@@ -3,12 +3,15 @@
 # Languages available:
 # eng (English), deu (Deutsch)
 Language: eng
-#
+
+# blub
 Minimum: 1
 Maximum: 100
+
 # Prize which the winner gets for a '/guessgame' quiz (normal)
-Item: "265:0:10"
 # Example: 265:0:10 // ID:Damage:Amount
+Item: "265:0:10"
+
 # Prize which the winner gets for a '/guessgamesquare' quiz (squares)
 SquareItem: "322:0:1"
 
