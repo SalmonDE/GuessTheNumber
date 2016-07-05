@@ -2,31 +2,31 @@ name: GuessTheNumber
 version: 1.1.1
 api: [2.0.0]
 main: SalmonDE\Number
-description: Guessing game for your Server!
+description: Guessing Game for your Server! 
 author: SalmonDE
 website: https://salmonde.de/
 commands:
  guessgame:
-  description: Starts a normal guessing game!
+  description: Starts a Normal Guessing Game!
   permission: guessthenumber.normal
  guessgamesquare:
-  description: Starts an advanced guessing game!
+  description: Starts an Advanced Guessing Game!
   permission: guessthenumber.square
  guessgamesolution:
-  description: Shows user the solution of the current task
+  description: Gives the user the solution to the current task.
   permission: guessthenumber.solution
  guessgameabort:
-  description: Aborts a guessing game
+  description: Aborts the active guessing game.
   permission: guessthenumber.abort
 permissions:
  guessthenumber:
-  description: Main permission of GuessTheNumber
+  description: Main Permission Node
   children:
    guessthenumber.normal:
-    description: Permission to use /guessgame
+    description: Permission for "/guessgame"
    guessthenumber.square:
-    description: Permission /guessgamesquare
+    description: Permission for "/guessgamesquare"
    guessthenumber.solution:
-    description: Allows the user of the command to see the wanted number of the guessing game
+    description: Permission for "/guessgamesoluton"
    guessthenumber.abort:
-    description: Permission to abort a guessing game
+    description: Permission for "/guessgameabort"
