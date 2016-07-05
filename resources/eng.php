@@ -45,7 +45,7 @@ $ Qnotright = 'Unfortunately, that is not the correct square number!';
 
 # Winner Message
 $ Qcongratulation = 'Congratulations, {name}!';
-$ Qrightnumber = "The perfect square von§9 {qnum} {§6is§b numq}"; // {qnum} is the output number and {numq} is the square number
+$ Qrightnumber = "The perfect square von§9 {qnum} §6is§b {numq}"; // {qnum} is the output number and {numq} is the square number
 $ Qwinnermessage = "You won {count} times {itemname}!";
 # {Count}: Number of price (Item)
 # {Itemname}: Name of the price
