@@ -44,7 +44,7 @@ $qbottom = '--- Square Root Quiz ---';
 $qnotright = 'Unfortunately, that is not the correct square number!';
 
 # Winner Message
-$qcongratulation = 'Congratulations, {name}!';
+$qcongratulation = "Congratulations, {name}!";
 $qrightnumber = "The sqaure root of §9{qnum} §6is §b{numq}"; 
 #{qnum} is the output number
 #{numq} is the square number
