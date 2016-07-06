@@ -2,7 +2,7 @@
 # Configurable Messages: English
 
 # Guess Game Abort Messages
-$gameaborted = 'Quiz has been aborted!!';
+$gameaborted = 'Quiz has been aborted!';
 $nogameactive = 'There are no active games availible!';
 
 # Guess Game Solution Messages
@@ -26,8 +26,8 @@ $numtoohigh = "You can only use numbers between §d{min} §cand §d{max}!";
 $notright = 'Unfortunately, that is not the correct answer!';
 
 # Winner Messages
-$congratulation = "Congratulations, {name}". '!';
-$rightnumber = "The correct number was: {number}";
+$congratulation = "Congratulations, {name}".'!';
+$rightnumber = "The correct number was: {number}".'.';
 $message = "You have been rewarded {count} of {itemname}!";
 # {count}: Amount of the item they are given.
 # {itemname}: Name of the Prize! (ex: dirt)
@@ -35,7 +35,7 @@ $message = "You have been rewarded {count} of {itemname}!";
 # Squares Guessing Game
 $qheader = '--- Square Root Quiz ---';
 $qfirstline = 'First, write a number in chat';
-$qsecondline = "the square root of §d{qnum}";
+$qsecondline = "the square root of §d{qnum}".'.';
 $qthirdline = 'If the guesser is correct,';
 $qfourthline = 'the guesser will be rewarded!';
 $qbottom = '--- Square Root Quiz ---';
@@ -54,5 +54,5 @@ $qwinnermessage = "You have been rewarded {count} of {itemname}!";
 # {Itemname}: Name of the price
 
 # Help Message
-$advice = 'To participate, your chat message must only consist of figures!';
+$advice = 'To participate, your message must only consist of numbers!';
 ?>
