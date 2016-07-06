@@ -2,7 +2,7 @@
 # Configurable Messages: English
 
 # Guess Game Abort Messages
-$gameaborted = 'Quiz has been aborted!';
+$gameaborted = 'Quiz has been aborted!!';
 $nogameactive = 'There are no active games availible!';
 
 # Guess Game Solution Messages
@@ -22,13 +22,13 @@ $fourthline = 'the guesser will be rewarded!';
 $bottom = '------- Number Quiz -------';
 
 # Error Messages
-$numtoohigh = 'You can only use numbers between §d{min} §cand §d{max}!';
+$numtoohigh = "You can only use numbers between §d{min} §cand §d{max}!";
 $notright = 'Unfortunately, that is not the correct answer!';
 
 # Winner Messages
-$congratulation = 'Congratulations, {name}!';
-$rightnumber = 'The correct number was: {number}';
-$message = 'You have been rewarded {count} of {itemname}!';
+$congratulation = "Congratulations, {name}". '!';
+$rightnumber = "The correct number was: {number}";
+$message = "You have been rewarded {count} of {itemname}!";
 # {count}: Amount of the item they are given.
 # {itemname}: Name of the Prize! (ex: dirt)
 
@@ -45,14 +45,14 @@ $qnotright = 'Unfortunately, that is not the correct square number!';
 
 # Winner Message
 $qcongratulation = 'Congratulations, {name}!';
-$qrightnumber = 'The sqaure root of §9{qnum} §6is §b{numq}'; 
+$qrightnumber = "The sqaure root of §9{qnum} §6is §b{numq}"; 
 #{qnum} is the output number
 #{numq} is the square number
 
-$qwinnermessage = 'You have been rewarded {count} of {itemname}!';
+$qwinnermessage = "You have been rewarded {count} of {itemname}!";
 # {Count}: Number of price (Item)
 # {Itemname}: Name of the price
 
 # Help Message
-$advice = 'To participate, your chat must only consist of numbers!';
+$advice = 'To participate, your chat message must only consist of figures!';
 ?>
