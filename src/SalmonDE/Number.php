@@ -15,7 +15,9 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
+use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as TF;
+use SalmonDE\NumberTask;
 
 class Number extends PluginBase implements Listener{
 
@@ -59,8 +61,8 @@ class Number extends PluginBase implements Listener{
 			'$itemname'
 		);
 		$dir = $this->getDataFolder();
+		$information = json_decode(file_get_contents($dir.'currentgame.json'), true);
 		if($cmd == 'guessgamesolution' || $cmd == 'Guessgamesolution'){
-			$information = json_decode(file_get_contents($dir.'currentgame.json'), true);
             if($sender->hasPermission('guessthenumber.solution')){
 				if(file_exists($dir.'currentgame.json')){
 				    if($information[behavior] == 5){
@@ -68,6 +70,8 @@ class Number extends PluginBase implements Listener{
 				    }elseif($information[behavior] == 1350){
 					    $sender->sendMessage(TF::BLUE.$squaresolution.(string) $information[numq]);
 				    }
+				}else{
+					$sender->sendMessage(TF::RED.'No Game Active!');
 				}
 			}
 		}elseif($cmd == 'guessgameabort' || $cmd == 'Guessgameabort'){
@@ -142,37 +146,15 @@ class Number extends PluginBase implements Listener{
 		$max = $this->getConfig()->get('Maximum');
 		if(file_exists($dir.'currentgame.json')){
 			$lang = $this->getConfig()->get("Language");
-		    include($this->getDataFolder().$lang.".php");	
+		    include($this->getDataFolder().$lang.".php");
             $information = json_decode(file_get_contents($dir.'currentgame.json'), true);
 		    if($information[status] == 1){
 			    $player = $event->getPlayer();
 			    $message = $event->getMessage();
 			    if(is_numeric($message)){
-					//$player->sendMessage(TF::LIGHT_PURPLE.'In 5 Sekunden erfährst du, ob es richtig ist!');
-					//sleep(5);
-					/*Problem with making the whole server sleep lol 
-					solution: own delayed task*/
-				    if($information[behavior] == 5){
-					    if($message == $num){
-							$winner = $player;
-							$this->givePrize($winner);
-					    }elseif($message > $max){
-							$player->sendMessage(TF::RED.$numtoohigh);
-						}else{
-						    $player->sendMessage(TF::GOLD.$notright);
-							$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
-					    }
-				    }elseif($information[behavior] == 1350){
-					    if($message == $information[numq]){
-							$winner = $player;
-							$this->givePrize($winner);
-					    }else{
-							$player->sendMessage(TF::GOLD.$qnotright);
-							$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
-						}
-				    }else{
-					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$information[behavior]");
-				    }
+					$player->sendMessage(TF::LIGHT_PURPLE.'In 5 Sekunden erfährst du, ob es richtig ist!');
+					$task = new NumberTask($this, $player, $message);
+					$this->getServer()->getScheduler()->scheduleDelayedTask($task, 100);
 					$event->setCancelled();
 			    }
 			}
