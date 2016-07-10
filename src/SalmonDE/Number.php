@@ -149,9 +149,10 @@ class Number extends PluginBase implements Listener{
 			    $player = $event->getPlayer();
 			    $message = $event->getMessage();
 			    if(is_numeric($message)){
-					$player->sendMessage(TF::LIGHT_PURPLE.'In 5 Sekunden erfährst du, ob es richtig ist!');
+					$time = $this->getConfig()->get('Timer') * 20;
+					$player->sendMessage(TF::LIGHT_PURPLE.'In '.$this->getConfig()->get('Timer').' Sekunden erfährst du, ob es richtig ist!');
 					$task = new NumberTask($this, $player, $message);
-					$this->getServer()->getScheduler()->scheduleDelayedTask($task, 100);
+					$this->getServer()->getScheduler()->scheduleDelayedTask($task, $time);
 					$event->setCancelled();
 			    }
 			}
