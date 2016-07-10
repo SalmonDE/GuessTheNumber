@@ -1,9 +1,11 @@
 <?php
 namespace SalmonDE;
 
+use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\PluginTask;
+use pocketmine\utils\TextFormat as TF;
 
 class NumberTask extends PluginTask{
 
@@ -14,35 +16,30 @@ class NumberTask extends PluginTask{
 	}
 
 	public function onRun($currentTick){
-		$lang = $this->getConfig()->get("Language");
-		include($this->getDataFolder().$lang.".php");
-		$min = $this->getConfig()->get('Minimum');
-		$max = $this->getConfig()->get('Maximum');
-		$information = json_decode(file_get_contents($this->getDataFolder().'currentgame.json'), true);
+		$lang = $this->getOwner()->getConfig()->get("Language");
+		include($this->getOwner()->getDataFolder().$lang.".php");
+		$min = $this->getOwner()->getConfig()->get('Minimum');
+		$max = $this->getOwner()->getConfig()->get('Maximum');
+		$information = json_decode(file_get_contents($this->getOwner()->getDataFolder().'currentgame.json'), true);
+		$this->player->sendMessage($information);
 		if($information[behavior] == 5){
-			if($message == $num){
-				$this->getOwner()->givePrize($player);
-		   }elseif($message > $max){
-				$player->sendMessage(TF::RED.$numtoohigh);
+			if($this->message == $num){
+				$this->getOwner()->givePrize($this->player);
+		   }elseif($this->message > $max){
+				$this->player->sendMessage(TF::RED.$numtoohigh);
 		   }else{
-				$player->sendMessage(TF::GOLD.$notright);
-				$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
+				$this->player->sendMessage(TF::GOLD.$notright);
+				$this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
 		   }
 	   }elseif($information[behavior] == 1350){
-			if($message == $information[numq]){
-				$winner = $player;
-				$this->getOwner()->givePrize($player);
+			if($this->message == $information[numq]){
+				$this->getOwner()->givePrize($this->player);
 		   }else{
-				$player->sendMessage(TF::GOLD.$qnotright);
-				$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
+				$this->player->sendMessage(TF::GOLD.$qnotright);
+				$player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
 		   }
 	   }else{
 			$this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA.$information[behavior]);
 	   }
-	    $this->killTask();
-	}
-
-	public function killTask(){
-		$this->getHandler()->cancel();
 	}
 }

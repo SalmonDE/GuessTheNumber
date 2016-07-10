@@ -9,7 +9,6 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\item\Item;
-use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\level\sound\FizzSound;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
@@ -20,8 +19,6 @@ use pocketmine\utils\TextFormat as TF;
 use SalmonDE\NumberTask;
 
 class Number extends PluginBase implements Listener{
-
-	protected $winner;
 
 	public function onEnable(){
 	    @mkdir($this->getDataFolder());
@@ -61,8 +58,8 @@ class Number extends PluginBase implements Listener{
 			'$itemname'
 		);
 		$dir = $this->getDataFolder();
-		$information = json_decode(file_get_contents($dir.'currentgame.json'), true);
 		if($cmd == 'guessgamesolution' || $cmd == 'Guessgamesolution'){
+			$information = json_decode(file_get_contents($dir.'currentgame.json'), true);
             if($sender->hasPermission('guessthenumber.solution')){
 				if(file_exists($dir.'currentgame.json')){
 				    if($information[behavior] == 5){
