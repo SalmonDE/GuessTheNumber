@@ -12,7 +12,7 @@ class NumberTask extends PluginTask{
 	public function __construct(Plugin $owner, Player $player, $message){
 		parent::__construct($owner);
 		$this->player = $player;
-		$this->message = $message;
+		$this->MSG = $message;
 	}
 
 	public function onRun($currentTick){
@@ -23,16 +23,16 @@ class NumberTask extends PluginTask{
 		$information = json_decode(file_get_contents($this->getOwner()->getDataFolder().'currentgame.json'), true);
 		$this->player->sendMessage($information);
 		if($information[behavior] == 5){
-			if($this->message == $num){
+			if(MSG == $num){
 				$this->getOwner()->givePrize($this->player);
-		   }elseif($this->message > $max){
+		   }elseif(MSG > $max){
 				$this->player->sendMessage(TF::RED.$numtoohigh);
 		   }else{
 				$this->player->sendMessage(TF::GOLD.$notright);
 				$this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
 		   }
 	   }elseif($information[behavior] == 1350){
-			if($this->message == $information[numq]){
+			if(MSG == $information[numq]){
 				$this->getOwner()->givePrize($this->player);
 		   }else{
 				$this->player->sendMessage(TF::GOLD.$qnotright);
