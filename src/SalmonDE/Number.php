@@ -9,23 +9,22 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\item\Item;
-use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\level\sound\FizzSound;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
+use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as TF;
+use SalmonDE\NumberTask;
 
 class Number extends PluginBase implements Listener{
-
-	protected $winner;
 
 	public function onEnable(){
 	    @mkdir($this->getDataFolder());
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'currentgame.txt')){
-			unlink($dir.'currentgame.txt');
+		if(file_exists($dir.'currentgame.json')){
+			unlink($dir.'currentgame.json');
 			$this->getLogger()->debug('Temp file Deleted!');
 		}
 	    $this->saveResource('config.yml');
@@ -60,22 +59,22 @@ class Number extends PluginBase implements Listener{
 		);
 		$dir = $this->getDataFolder();
 		if($cmd == 'guessgamesolution' || $cmd == 'Guessgamesolution'){
+			$information = json_decode(file_get_contents($dir.'currentgame.json'), true);
             if($sender->hasPermission('guessthenumber.solution')){
-				if(file_exists($dir.'currentgame.txt')){
-				    $file = file_get_contents($dir.'currentgame.txt');
-		            $getinfo = unserialize($file);
-		            extract($getinfo);
-				    if($behavior == 5){
-					    $sender->sendMessage(TF::BLUE.$normalsolution.(string) $num);
-				    }elseif($behavior == 1350){
-					    $sender->sendMessage(TF::BLUE.$squaresolution.(string) $numq);
+				if(file_exists($dir.'currentgame.json')){
+				    if($information[behavior] == 5){
+					    $sender->sendMessage(TF::BLUE.$normalsolution.(string) $information[num]);
+				    }elseif($information[behavior] == 1350){
+					    $sender->sendMessage(TF::BLUE.$squaresolution.(string) $information[numq]);
 				    }
+				}else{
+					$sender->sendMessage(TF::RED.'No Game Active!');
 				}
 			}
 		}elseif($cmd == 'guessgameabort' || $cmd == 'Guessgameabort'){
 				if($sender->hasPermission('guessthenumber.abort')){
-					if(file_exists($dir.'currentgame.txt')){
-					    unlink($dir.'currentgame.txt');
+					if(file_exists($dir.'currentgame.json')){
+					    unlink($dir.'currentgame.json');
 				        $this->getServer()->broadcastMessage(TF::RED.TF::BOLD.$gameaborted);
 						return true;
 					}else{
@@ -86,10 +85,10 @@ class Number extends PluginBase implements Listener{
 					$sender->sendMessage(TF::GOLD.$nopermission);
 					return true;
 				}
-		}elseif(file_exists($dir.'currentgame.txt')){
+		}elseif(file_exists($dir.'currentgame.json')){
 			$sender->sendMessage(TF::RED.$gamealreadyactive);
 		}else{
-		    $tempfile = fopen($dir.'currentgame.txt','w');
+		    $tempfile = fopen($dir.'currentgame.json','w');
 		    if($cmd == 'guessgame' || $cmd == 'Guessgame'){
 				$min = $this->getConfig()->get('Minimum');
 				$max = $this->getConfig()->get('Maximum');
@@ -101,11 +100,11 @@ class Number extends PluginBase implements Listener{
 					'num' => "$num",
 					'behavior' => "$behavior"
 		        );
-		        fwrite($tempfile,serialize($store));
-				$firstlineconverted = str_replace($replace, $replaced, $firstline);
+		        fwrite($tempfile, json_encode($store));
+				$firstlinec = str_ireplace($replace, $replaced, $firstline);
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$header);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$firstlineconverted);
+				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$firstlinec);
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$secondline);
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$thirdline);
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$fourthline);
@@ -124,7 +123,7 @@ class Number extends PluginBase implements Listener{
 					'numq' => "$numq",
 					'behavior' => "$behavior"
 		        );
-				fwrite($tempfile,serialize($store));
+				fwrite($tempfile, json_encode($store));
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
 				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$qheader);
 				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$qfirstline);
@@ -142,41 +141,18 @@ class Number extends PluginBase implements Listener{
 		$dir = $this->getDataFolder();
 		$min = $this->getConfig()->get('Minimum');
 		$max = $this->getConfig()->get('Maximum');
-		if(file_exists($dir.'currentgame.txt')){
+		if(file_exists($dir.'currentgame.json')){
 			$lang = $this->getConfig()->get("Language");
-		    include($this->getDataFolder().$lang.".php");	
-		    $file = file_get_contents($dir.'currentgame.txt');
-		    $getinfo = unserialize($file);
-		    extract($getinfo);
-		    if($status == 1){
+		    include($this->getDataFolder().$lang.".php");
+            $information = json_decode(file_get_contents($dir.'currentgame.json'), true);
+		    if($information[status] == 1){
 			    $player = $event->getPlayer();
 			    $message = $event->getMessage();
 			    if(is_numeric($message)){
-					//$player->sendMessage(TF::LIGHT_PURPLE.'In 5 Sekunden erfährst du, ob es richtig ist!');
-					//sleep(5);
-					/*Problem with making the whole server sleep lol 
-					solution: own delayed task*/
-				    if($behavior == 5){
-					    if($message == $num){
-							$winner = $player;
-							$this->givePrize($winner);
-					    }elseif($message > $max){
-							$player->sendMessage(TF::RED.$numtoohigh);
-						}else{
-						    $player->sendMessage(TF::GOLD.$notright);
-							$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
-					    }
-				    }elseif($behavior == 1350){
-					    if($message == $numq){
-							$winner = $player;
-							$this->givePrize($winner);
-					    }else{
-							$player->sendMessage(TF::GOLD.$qnotright);
-							$player->getLevel()->addSound(new AnvilFallSound($player->getPosition()));
-						}
-				    }else{
-					    $this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA."$behavior");
-				    }
+					$time = $this->getConfig()->get('Timer') * 20;
+					$player->sendMessage(TF::LIGHT_PURPLE.'In '.$this->getConfig()->get('Timer').' Sekunden erfährst du, ob es richtig ist!');
+					$task = new NumberTask($this, $player, $message);
+					$this->getServer()->getScheduler()->scheduleDelayedTask($task, $time);
 					$event->setCancelled();
 			    }
 			}
@@ -185,14 +161,12 @@ class Number extends PluginBase implements Listener{
 
 	public function onJoin(PlayerJoinEvent $event){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'currentgame.txt')){
+		if(file_exists($dir.'currentgame.json')){
 			$lang = $this->getConfig()->get("Language");
 		    include($this->getDataFolder().$lang.".php");
-		    $file = file_get_contents($dir.'currentgame.txt');
-		    $getinfo = unserialize($file);
-		    extract($getinfo);
+            $information = json_decode(file_get_contents($dir.'currentgame.json'), true);
 			$player = $event->getPlayer();
-			if($behavior = 5){
+			if($information[behavior] == 5){
 				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
 				$player->sendMessage(TF::GOLD.TF::BOLD.$header);
 				$player->sendMessage(TF::AQUA.TF::BOLD.$firstline);
@@ -202,7 +176,7 @@ class Number extends PluginBase implements Listener{
 				$player->sendMessage(TF::GOLD.TF::BOLD.$bottom);
                 $player->sendMessage(TF::GOLD.TF::BOLD."\n");
 				$player->sendMessage(TF::RED.$advice);
-			}elseif($behavior = 1350){
+			}elseif($information[behavior] == 1350){
 				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
 				$player->sendMessage(TF::GOLD.TF::BOLD.$qheader);
 				$player->sendMessage(TF::AQUA.TF::BOLD.$qfirstline);
@@ -220,15 +194,13 @@ class Number extends PluginBase implements Listener{
 		$lang = $this->getConfig()->get("Language");
 		include($this->getDataFolder().$lang.".php");
 		$dir = $this->getDataFolder();
-		$file = file_get_contents($dir.'currentgame.txt');
-		$getinfo = unserialize($file);
-		extract($getinfo);
+        $information = json_decode(file_get_contents($dir.'currentgame.json'), true);
 		$name = $winner->getDisplayName();
-		if($behavior == 5){
+		if($information[behavior] == 5){
 			foreach($this->getServer()->getOnlinePlayers() as $players){
 				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
 			}
-			unlink($dir.'currentgame.txt');
+			unlink($dir.'currentgame.json');
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.$congratulation);
 			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$rightnumber);
 			$item = $this->getConfig()->get('Item');
@@ -240,7 +212,7 @@ class Number extends PluginBase implements Listener{
 			foreach($this->getServer()->getOnlinePlayers() as $players){
 				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
 			}
-			unlink($dir.'currentgame.txt');
+			unlink($dir.'currentgame.json');
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.$qcongratulation);
 			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$qrightnumber);
 			$item = $this->getConfig()->get('SquareItem');
@@ -253,8 +225,8 @@ class Number extends PluginBase implements Listener{
 
 	public function onDisable(){
 		$dir = $this->getDataFolder();
-		if(file_exists($dir.'currentgame.txt')){
-			unlink($dir.'currentgame.txt');
+		if(file_exists($dir.'currentgame.json')){
+			unlink($dir.'currentgame.json');
 			$this->getLogger()->debug('Temp file Deleted!');
 		}
 	}
