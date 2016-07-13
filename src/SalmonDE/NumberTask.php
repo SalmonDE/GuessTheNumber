@@ -21,7 +21,6 @@ class NumberTask extends PluginTask{
 		$min = $this->getOwner()->getConfig()->get('Minimum');
 		$max = $this->getOwner()->getConfig()->get('Maximum');
 		$information = json_decode(file_get_contents($this->getOwner()->getDataFolder().'currentgame.json'), true);
-		$this->player->sendMessage($information);
 		if($information[behavior] == 5){
 			if(MSG == $num){
 				$this->getOwner()->givePrize($this->player);
