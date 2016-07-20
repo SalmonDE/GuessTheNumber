@@ -1,7 +1,7 @@
 # GuessTheNumber
 A ClearSky (PocketMine-MP) plugin which let you make random number quizes. First player which get's the right answer wins!
 
-| Command | Permission | Information |
+| Command | Permission Node | Information |
 |---------|------------|-------------|
 |/guessgame|guessthenumber.normal|Starts a Normal Guessing Game!|
 |
