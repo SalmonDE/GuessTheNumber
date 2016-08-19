@@ -22,7 +22,7 @@ class NumberTask extends PluginTask{
 		$max = $this->getOwner()->getConfig()->get('Maximum');
 		$information = json_decode(file_get_contents($this->getOwner()->getDataFolder().'currentgame.json'), true);
 		if($information[behavior] == 5){
-			if($this->MSG == $num){
+			if($this->MSG == $information['num']){
 				$this->getOwner()->givePrize($this->player);
 		   }elseif($this->MSG > $max){
 				$this->player->sendMessage(TF::RED.$numtoohigh);
@@ -31,14 +31,14 @@ class NumberTask extends PluginTask{
 				$this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
 		   }
 	   }elseif($information[behavior] == 1350){
-			if($this->MSG == $information[numq]){
+			if($this->MSG == $information['numq']){
 				$this->getOwner()->givePrize($this->player);
 		   }else{
 				$this->player->sendMessage(TF::GOLD.$qnotright);
 				$player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
 		   }
 	   }else{
-			$this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA.$information[behavior]);
+			$this->getLogger()->critical(TF::DARK_RED.'Error 1! Not valid behavior: '.TF::AQUA.$information['behavior']);
 	   }
 	}
 }
