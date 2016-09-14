@@ -19,7 +19,6 @@ before_script:
  - cp -rf SalmonGER/GuessTheNumber/plugin.yml ClearSky/plugins/GuessTheNumber-src
  - cp -rf SalmonGER/GuessTheNumber/LICENSE ClearSky/plugins/GuessTheNumber-src
  - cp -rf SalmonGER/GuessTheNumber/build.php ClearSky/
- - cp -rf SalmonGER/GuessTheNumber/syntaxcheck.php ClearSky/
  - cd ClearSky/plugins/
  - wget -O DevTools.phar https://github.com/PocketMine/DevTools/releases/download/v1.11.0/DevTools_v1.11.0.phar
  - cd /home/travis/build/ClearSky
