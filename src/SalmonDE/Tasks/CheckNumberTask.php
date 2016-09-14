@@ -16,29 +16,21 @@ class CheckNumberTask extends PluginTask
 		    $this->msg = $message;
 		    $this->lang = $owner->getMessages();
 		    $this->information = $owner->information;
+        $this->min = $owner->min;
+        $this->max = $owner->max;
 	  }
 
 	  public function onRun($currentTick){
-		    $min = $this->getOwner()->getConfig()->get('Minimum');
-		    $max = $this->getOwner()->getConfig()->get('Maximum');
-		    if($this->information['behavior'] == 5){
-			      if($this->msg == $this->information['num']){
+		    if($this->msg == $this->information['solution']){
 				    $this->getOwner()->givePrize($this->player);
-			      }elseif($this->msg > $max){
-				        $this->player->sendMessage(TF::RED.$numtoohigh);
-		        }else{
-				        $this->player->sendMessage(TF::GOLD.$notright);
-				        $this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
-		        }
-	      }elseif($this->information['behavior'] == 1350){
-			      if($this->msg == $this->information['numq']){
-				    $this->getOwner()->givePrize($this->player);
-		        }else{
-				        $this->player->sendMessage(TF::GOLD.$qnotright);
-				        $player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
-		        }
-	     }else{
-		       $this->getOwner()->getLogger()->critical(TF::DARK_RED.'Error! Not valid behavior: '.TF::AQUA.$this->information['behavior']);
-	     }
+			  }else{
+            $this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
+            if($this->information['behavior'] == 1 && $this->msg > $this->max){
+				        $this->player->sendMessage(TF::RED.str_ireplace(['{min}', '{max}'], [$this->min, $this->max],$this->lang['numtoohigh']));
+            }else{
+				        $this->player->sendMessage(TF::GOLD.$this->lang['notright']);
+            }
+		    }
+        unset($this->getOwner()->queue[$this->player->getName()]);
 	  }
 }
