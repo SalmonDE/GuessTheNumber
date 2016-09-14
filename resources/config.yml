@@ -1,23 +1,23 @@
 # Configuration file of GuessTheNumber!
 
 # Languages available:
-# eng (English), deu (Deutsch)
-Language: eng
+# deu (Deutsch)
+Language: deu
 
-# Min/Max Numbers
-Minimum: 1
-Maximum: 100
+# Min/Max Numbers for a normal guessing game
+Min: 1
+Max: 100
 
 # Prize which the winner gets for a '/guessgame' quiz (normal)
 # Example: 265:0:10 // ID:Damage:Amount
-Item: "265:0:10"
+Item: '265:0:10'
 
 # Prize which the winner gets for a '/guessgamesquare' quiz (squares)
-SquareItem: "322:0:1"
+SquareItem: '322:0:1'
 
-# Time which a player needs to wait until the plugins checks the answer in seconds
+# Time which a player needs to wait until the plugins checks the answer (In seconds)
 Timer: 5
 
-# Report bugs here: https://github.com/SalmonCraftPE/GuessTheNumber/issues
+# Report bugs here: https://github.com/SalmonCraftPE/GuessTheNumber/issues/
 # Have fun with this plugin! :)
 # ~ SalmonDE

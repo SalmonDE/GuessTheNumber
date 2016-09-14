@@ -2,232 +2,160 @@
 namespace SalmonDE;
 
 use pocketmine\command\Command;
-use pocketmine\command\CommandExecutor;
 use pocketmine\command\CommandSender;
-use pocketmine\command\PluginCommand;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\item\Item;
 use pocketmine\level\sound\FizzSound;
-use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
-use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as TF;
-use SalmonDE\NumberTask;
+use SalmonDE\Tasks\CheckNumberTask;
 
-class Number extends PluginBase implements Listener{
+class Number extends PluginBase implements Listener
+{
 
 	public function onEnable(){
 	    @mkdir($this->getDataFolder());
-		$dir = $this->getDataFolder();
-		if(file_exists($dir.'currentgame.json')){
-			unlink($dir.'currentgame.json');
-			$this->getLogger()->debug('Temp file Deleted!');
-		}
 	    $this->saveResource('config.yml');
-		$lang = $this->getConfig()->get("Language");
-		$this->saveResource($lang.".php");
-		include($this->getDataFolder().$lang.".php");
-		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+			if(!file_exists($this->getDataFolder().'messages.ini')){
+		      $this->saveResource($this->getConfig()->get('Language').'.ini');
+			    rename($this->getDataFolder().$this->getConfig()->get('Language').'.ini', $this->getDataFolder().'messages.ini');
+		  }
+			$this->min = $this->getConfig()->get('Min');
+			$this->max = $this->getConfig()->get('Max');
+		  $this->getServer()->getPluginManager()->registerEvents($this, $this);
+	}
+
+  public function getMessages(){
+		  if(file_exists($this->getDataFolder().'messages.ini')){
+			    return parse_ini_file($this->getDataFolder().'messages.ini', true);
+			}
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
-		$lang = $this->getConfig()->get("Language");
-		require($this->getDataFolder().$lang.".php");
-		$replace = array(
-		    '{min}',
-			'{max}',
-			'{number}',
-	        '{qnum}',
-			'{numq}',
-			'{name}',
-			'{count}',
-			'{itemname}'
-		);
-		$replaced = array(
-		    '$min',
-			'$max',
-			'$num',
-	        '$qnum',
-			'$numq',
-			'$name',
-			'$data[2]',
-			'$itemname'
-		);
-		$dir = $this->getDataFolder();
-		if($cmd == 'guessgamesolution' || $cmd == 'Guessgamesolution'){
-			$information = json_decode(file_get_contents($dir.'currentgame.json'), true);
-            if($sender->hasPermission('guessthenumber.solution')){
-				if(file_exists($dir.'currentgame.json')){
-				    if($information[behavior] == 5){
-					    $sender->sendMessage(TF::BLUE.$normalsolution.(string) $information[num]);
-				    }elseif($information[behavior] == 1350){
-					    $sender->sendMessage(TF::BLUE.$squaresolution.(string) $information[numq]);
+		  if(strtolower($cmd->getName()) == 'guessgamesolution'){
+          if($sender->hasPermission('guessthenumber.solution')){
+				      if(isset($this->information)){
+					        $sender->sendMessage(TF::BLUE.str_ireplace('{value}', $this->information['solution'], $this->getMessages()['solution']));
+				      }else{
+					        $sender->sendMessage(TF::RED.$this->getMessages()['nogameactive']);
+				      }
+			      }
+		  }elseif(strtolower($cmd->getName()) == 'guessgameabort'){
+				  if($sender->hasPermission('guessthenumber.abort')){
+					    if(isset($this->information)){
+					        unset($this->information);
+				          $this->getServer()->broadcastMessage(TF::RED.TF::BOLD.$this->getMessages()['gameaborted']);
+						      return true;
+					    }else{
+						      $sender->sendMessage(TF::GOLD.$this->getMessages()['nogameactive']);
+						      return true;
+					    }
+				    }else{
+					    $sender->sendMessage(TF::GOLD.$this->getMessages()['nogameactive']);
+					    return true;
 				    }
-				}else{
-					$sender->sendMessage(TF::RED.'No Game Active!');
-				}
-			}
-		}elseif($cmd == 'guessgameabort' || $cmd == 'Guessgameabort'){
-				if($sender->hasPermission('guessthenumber.abort')){
-					if(file_exists($dir.'currentgame.json')){
-					    unlink($dir.'currentgame.json');
-				        $this->getServer()->broadcastMessage(TF::RED.TF::BOLD.$gameaborted);
-						return true;
-					}else{
-						$sender->sendMessage(TF::GOLD.$nogameactive);
-						return true;
-					}
-				}else{
-					$sender->sendMessage(TF::GOLD.$nopermission);
-					return true;
-				}
-		}elseif(file_exists($dir.'currentgame.json')){
-			$sender->sendMessage(TF::RED.$gamealreadyactive);
-		}else{
-		    $tempfile = fopen($dir.'currentgame.json','w');
-		    if($cmd == 'guessgame' || $cmd == 'Guessgame'){
-				$min = $this->getConfig()->get('Minimum');
-				$max = $this->getConfig()->get('Maximum');
-		        $status = 1;
-		        $behavior = 5;
-		        $num = mt_rand($min,$max);
-		        $store = array(
-		            'status' => "$status",
-					'num' => "$num",
-					'behavior' => "$behavior"
-		        );
-		        fwrite($tempfile, json_encode($store));
-				$firstlinec = str_ireplace($replace, $replaced, $firstline);
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$header);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$firstlinec);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$secondline);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$thirdline);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$fourthline);
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$bottom);
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
-				$this->getServer()->broadcastMessage(TF::RED.$advice);
-		        return true;
-		    }elseif($cmd == 'guessgamesquare' || $cmd == 'Guessgamesquare'){
-		        $status = 1;
-		        $behavior = 1350;
-		        $qnum = mt_rand(1,20);
-		        $numq = $qnum * $qnum;
-				$store = array(
-		            'status' => "$status",
-					'qnum' => "$qnum",
-					'numq' => "$numq",
-					'behavior' => "$behavior"
-		        );
-				fwrite($tempfile, json_encode($store));
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$qheader);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$qfirstline);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$qsecondline);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$qthirdline);
-				$this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.$qfourthline);
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$qbottom);
-				$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD."\n");
-				$this->getServer()->broadcastMessage(TF::RED.$advice);
-		    }
-		}
+		  }elseif(isset($this->information)){
+			    $sender->sendMessage(TF::RED.$this->getMessages()['gamealreadyactive']);
+		  }else{
+		      if(strtolower($cmd->getName()) == 'guessgame'){
+              $this->information = ['behavior' => 1, 'solution' => mt_rand($this->min, $this->max)];
+				      $this->getServer()->broadcastMessage("\n");
+				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['header']);
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['firstline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['secondline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['thirdline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['fourthline']));
+				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['bottom']);
+				      $this->getServer()->broadcastMessage("\n");
+				      $this->getServer()->broadcastMessage(TF::RED.$this->getMessages()['advice']);
+		          return true;
+		      }elseif(strtolower($cmd->getName()) == 'guessgamesquare'){
+		          $num = mt_rand(1, 20);
+              $this->information = ['behavior' => 2, 'num' => $num, 'solution' => $num * $num];
+				      $this->getServer()->broadcastMessage("\n");
+				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['header']);
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['firstline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['secondline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['thirdline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['fourthline']));
+				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['bottom']);
+				      $this->getServer()->broadcastMessage("\n");
+				      $this->getServer()->broadcastMessage(TF::RED.$this->getMessages()['advice']);
+					    return true;
+		      }
+		  }
 	}
 
 	public function onChat(PlayerChatEvent $event){
-		$dir = $this->getDataFolder();
-		$min = $this->getConfig()->get('Minimum');
-		$max = $this->getConfig()->get('Maximum');
-		if(file_exists($dir.'currentgame.json')){
-			$lang = $this->getConfig()->get("Language");
-		    include($this->getDataFolder().$lang.".php");
-            $information = json_decode(file_get_contents($dir.'currentgame.json'), true);
-		    if($information[status] == 1){
-			    $player = $event->getPlayer();
-			    $message = $event->getMessage();
-			    if(is_numeric($message)){
-					$time = $this->getConfig()->get('Timer') * 20;
-					$player->sendMessage(TF::LIGHT_PURPLE.'In '.$this->getConfig()->get('Timer').' Sekunden erfährst du, ob es richtig ist!');
-					$task = new NumberTask($this, $player, $message);
-					$this->getServer()->getScheduler()->scheduleDelayedTask($task, $time);
-					$event->setCancelled();
+		  if(isset($this->information)){
+			    if(is_numeric($event->getMessage())){
+						  if(!isset($this->queue[$event->getPlayer()->getName()])){
+						      $this->queue[$event->getPlayer()->getName()] = 1;
+						      $event->getPlayer()->sendMessage(TF::LIGHT_PURPLE.str_ireplace('{value}', $this->getConfig()->get('Timer'), $this->getMessages()['timer']));
+					        $this->getServer()->getScheduler()->scheduleDelayedTask(new CheckNumberTask($this, $event->getPlayer(), $event->getMessage()), $this->getConfig()->get('Timer') * 20);
+						  }else{
+								  $event->getPlayer()->sendMessage(TF::RED.$this->getMessages()['inqueue']);
+							}
+							$event->setCancelled();
 			    }
-			}
-		}
-    }
+		  }
+  }
 
 	public function onJoin(PlayerJoinEvent $event){
-		$dir = $this->getDataFolder();
-		if(file_exists($dir.'currentgame.json')){
-			$lang = $this->getConfig()->get("Language");
-		    include($this->getDataFolder().$lang.".php");
-            $information = json_decode(file_get_contents($dir.'currentgame.json'), true);
-			$player = $event->getPlayer();
-			if($information[behavior] == 5){
-				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
-				$player->sendMessage(TF::GOLD.TF::BOLD.$header);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$firstline);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$secondline);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$thirdline);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$fourthline);
-				$player->sendMessage(TF::GOLD.TF::BOLD.$bottom);
-                $player->sendMessage(TF::GOLD.TF::BOLD."\n");
-				$player->sendMessage(TF::RED.$advice);
-			}elseif($information[behavior] == 1350){
-				$player->sendMessage(TF::GOLD.TF::BOLD."\n");
-				$player->sendMessage(TF::GOLD.TF::BOLD.$qheader);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$qfirstline);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$qsecondline);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$qthirdline);
-				$player->sendMessage(TF::AQUA.TF::BOLD.$qfourthline);
-				$player->sendMessage(TF::GOLD.TF::BOLD.$qbottom);
-                $player->sendMessage(TF::GOLD.TF::BOLD."\n");
-				$player->sendMessage(TF::RED.$advice);
-			}
-		}
+		  if(isset($this->information)){
+			    $player = $event->getPlayer();
+			    if($this->information['behavior'] == 1){
+				      $player->sendMessage("\n");
+			 	      $player->sendMessage(TF::GOLD.TF::BOLD.$this->getMessages()['header']);
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['firstline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['secondline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['thirdline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['fourthline']));
+				      $player->sendMessage(TF::GOLD.TF::BOLD.$this->getMessages()['bottom']);
+              $player->sendMessage("\n");
+				      $player->sendMessage(TF::RED.$this->getMessages()['advice']);
+			    }elseif($this->information['behavior'] == 2){
+				      $player->sendMessage(TF::GOLD.TF::BOLD."\n");
+				      $player->sendMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['header']);
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['firstline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['secondline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['thirdline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['fourthline']));
+				      $player->sendMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['bottom']);
+              $player->sendMessage("\n");
+				      $player->sendMessage(TF::RED.$this->getMessages()['advice']);
+			    }
+		  }
 	}
 
-	public function givePrize($winner){
-		$lang = $this->getConfig()->get("Language");
-		include($this->getDataFolder().$lang.".php");
-		$dir = $this->getDataFolder();
-        $information = json_decode(file_get_contents($dir.'currentgame.json'), true);
-		$name = $winner->getDisplayName();
-		if($information[behavior] == 5){
-			foreach($this->getServer()->getOnlinePlayers() as $players){
-				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
-			}
-			unlink($dir.'currentgame.json');
-			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.$congratulation);
-			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$rightnumber);
-			$item = $this->getConfig()->get('Item');
-			$data = explode(':', $item);
-			$itemname = Item::get($data[0])->getName();
-			$winner->getInventory()->addItem(new Item($data[0], $data[1], $data[2]));
-		    $winner->sendMessage(TF::GREEN.TF::BOLD.$winnermessage);
-		}elseif($behavior == 1350){
-			foreach($this->getServer()->getOnlinePlayers() as $players){
-				$players->getLevel()->addSound(new FizzSound($players->getPosition()));
-			}
-			unlink($dir.'currentgame.json');
-			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.$qcongratulation);
-			$this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$qrightnumber);
-			$item = $this->getConfig()->get('SquareItem');
-			$data = explode(':', "$item");
-			$itemname = Item::get($data[0])->getName();
-			$winner->getInventory()->addItem(new Item($data[0], $data[1], $data[2]));
-		    $winner->sendMessage(TF::LIGHT_PURPLE.TF::BOLD.$qwinnermessage);
-		}
-	}
-
-	public function onDisable(){
-		$dir = $this->getDataFolder();
-		if(file_exists($dir.'currentgame.json')){
-			unlink($dir.'currentgame.json');
-			$this->getLogger()->debug('Temp file Deleted!');
-		}
+	public function givePrize(Player $winner){
+		  $name = $winner->getDisplayName();
+		  if($this->information['behavior'] == 1){
+			    foreach($this->getServer()->getOnlinePlayers() as $player){
+				      $player->getLevel()->addSound(new FizzSound($player->getPosition()));
+			    }
+			    $this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.str_ireplace('{value}', $name, $this->getMessages()['congratulation']));
+			    $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.str_ireplace('{value}', $this->information['solution'], $this->getMessages()['rightnumber']));
+					unset($this->information);
+			    $item = explode(':', $this->getConfig()->get('Item'));
+			    $itemname = Item::get($item[0])->getName();
+			    $winner->getInventory()->addItem(new Item($item[0], $item[1], $item[2]));
+		      $winner->sendMessage(TF::GREEN.TF::BOLD.str_ireplace(['{count}', '{itemname}'], [$item[2], $itemname], $this->getMessages()['winnermessage']));
+		  }elseif($this->information['behavior'] == 2){
+			    foreach($this->getServer()->getOnlinePlayers() as $player){
+				      $player->getLevel()->addSound(new FizzSound($player->getPosition()));
+			    }
+			    $this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.str_ireplace('{value}', $name, $this->getMessages()['congratulation']));
+			    $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.str_ireplace(['{num}', '{solution}'], [$this->information['num'], $this->information['solution']], $this->getMessages()['Square']['rightnumber']));
+					unset($this->information);
+			    $item = explode(':', $this->getConfig()->get('SquareItem'));
+			    $itemname = Item::get($item[0])->getName();
+			    $winner->getInventory()->addItem(new Item($item[0], $item[1], $item[2]));
+		      $winner->sendMessage(TF::LIGHT_PURPLE.TF::BOLD.str_ireplace(['{count}', '{itemname}'], [$item[2], $itemname], $this->getMessages()['winnermessage']));
+      }
 	}
 }
