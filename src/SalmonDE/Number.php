@@ -13,11 +13,14 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as TF;
 use SalmonDE\Tasks\CheckNumberTask;
+use SalmonDE\Updater\CheckVersionTask;
+use SalmonDE\Updater\UpdaterTask;
 
 class Number extends PluginBase implements Listener
 {
 
 	public function onEnable(){
+		  $this->getServer()->getScheduler()->scheduleAsyncTask(new CheckVersionTask($this));
 	    @mkdir($this->getDataFolder());
 	    $this->saveResource('config.yml');
 			if(!file_exists($this->getDataFolder().'messages.ini')){
@@ -157,5 +160,11 @@ class Number extends PluginBase implements Listener
 			    $winner->getInventory()->addItem(new Item($item[0], $item[1], $item[2]));
 		      $winner->sendMessage(TF::LIGHT_PURPLE.TF::BOLD.str_ireplace(['{count}', '{itemname}'], [$item[2], $itemname], $this->getMessages()['winnermessage']));
       }
+	}
+
+	public function update($nversion){
+			$url = Utils::getURL($this->getDescription()->getWebsite().'MCPE-Plugins/Updater/Updater.php?plugin='.$this->getDescription()->getName().'&type=downloadurl');
+			$md5 = Utils::getURL($this->getDescription()->getWebsite().'MCPE-Plugins/Updater/Updater.php?plugin='.$this->getDescription()->getName().'&type=md5');
+			$this->getServer()->getScheduler()->scheduleTask(new UpdaterTask($url, $md5, $this->getDescription()->getVersion(), $nversion, $this));
 	}
 }
