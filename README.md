@@ -1,5 +1,6 @@
 # GuessTheNumber
-A ClearSky (PocketMine-MP) plugin which let you make random number quizes. First player which get's the right answer wins!
+[![Build Status](https://travis-ci.org/SalmonGER/GuessTheNumber.svg?branch=master)](https://travis-ci.org/SalmonGER/GuessTheNumber)
+A PocketMine-MP plugin which makes you able to do random number quizes. First player which get's the right answer wins! :)
 
 | Command | Permission Node | Information |
 |---------|------------|-------------|
