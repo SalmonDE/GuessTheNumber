@@ -79,13 +79,13 @@ class Number extends PluginBase implements Listener
 		          return true;
 		      }elseif(strtolower($cmd->getName()) == 'guessgamesquare'){
 		          $num = mt_rand(1, 20);
-              $this->information = ['behavior' => 2, 'num' => $num, 'solution' => $num * $num];
+              $this->information = ['behavior' => 2, 'solution' => $num * $num];
 				      $this->getServer()->broadcastMessage("\n");
 				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['header']);
-				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['firstline']));
-				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['secondline']));
-				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['thirdline']));
-				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['fourthline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['firstline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['secondline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['thirdline']));
+				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['fourthline']));
 				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['bottom']);
 				      $this->getServer()->broadcastMessage("\n");
 				      $this->getServer()->broadcastMessage(TF::RED.$this->getMessages()['advice']);
@@ -125,10 +125,10 @@ class Number extends PluginBase implements Listener
 			    }elseif($this->information['behavior'] == 2){
 				      $player->sendMessage(TF::GOLD.TF::BOLD."\n");
 				      $player->sendMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['header']);
-				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['firstline']));
-				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['secondline']));
-				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['thirdline']));
-				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', $this->information['num'], $this->getMessages()['Square']['fourthline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['firstline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['secondline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['thirdline']));
+				      $player->sendMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['fourthline']));
 				      $player->sendMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['bottom']);
               $player->sendMessage("\n");
 				      $player->sendMessage(TF::RED.$this->getMessages()['advice']);
@@ -154,7 +154,7 @@ class Number extends PluginBase implements Listener
 				      $player->getLevel()->addSound(new FizzSound($player->getPosition()));
 			    }
 			    $this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.str_ireplace('{value}', $name, $this->getMessages()['congratulation']));
-			    $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.str_ireplace(['{num}', '{solution}'], [$this->information['num'], $this->information['solution']], $this->getMessages()['Square']['rightnumber']));
+			    $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.str_ireplace(['{num}', '{solution}'], [sqrt($this->information['solution']), $this->information['solution']], $this->getMessages()['Square']['rightnumber']));
 					unset($this->information);
 			    $item = explode(':', $this->getConfig()->get('SquareItem'));
 			    $itemname = Item::get($item[0])->getName();
