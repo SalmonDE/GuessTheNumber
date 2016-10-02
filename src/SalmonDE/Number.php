@@ -98,9 +98,10 @@ class Number extends PluginBase implements Listener
 		  if(isset($this->information)){
 			    if(is_numeric($event->getMessage())){
 						  if(!isset($this->queue[$event->getPlayer()->getName()])){
-						      $this->queue[$event->getPlayer()->getName()] = 1;
 						      $event->getPlayer()->sendMessage(TF::LIGHT_PURPLE.str_ireplace('{value}', $this->getConfig()->get('Timer'), $this->getMessages()['timer']));
-					        $this->getServer()->getScheduler()->scheduleDelayedTask(new CheckNumberTask($this, $event->getPlayer(), $event->getMessage()), $this->getConfig()->get('Timer') * 20);
+									$task = new CheckNumberTask($this, $event->getPlayer(), $event->getMessage());
+					        $this->getServer()->getScheduler()->scheduleDelayedTask($task, $this->getConfig()->get('Timer') * 20);
+									$this->queue[$event->getPlayer()->getName()] = $task->getTaskId();
 						  }else{
 								  $event->getPlayer()->sendMessage(TF::RED.$this->getMessages()['inqueue']);
 							}
@@ -137,6 +138,9 @@ class Number extends PluginBase implements Listener
 	}
 
 	public function givePrize(Player $winner){
+		  foreach($this->queue as $taskid){
+				  $this->getServer()->getScheduler()->cancelTask($taskid);
+			}
 		  $name = $winner->getDisplayName();
 		  if($this->information['behavior'] == 1){
 			    foreach($this->getServer()->getOnlinePlayers() as $player){
