@@ -67,27 +67,23 @@ class Number extends PluginBase implements Listener
 		  }else{
 		      if(strtolower($cmd->getName()) == 'guessgame'){
               $this->information = ['behavior' => 1, 'solution' => mt_rand($this->min, $this->max)];
-				      $this->getServer()->broadcastMessage("\n");
 				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['header']);
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['firstline']));
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['secondline']));
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['thirdline']));
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace(['{min}', '{max}'], [$this->min, $this->max], $this->getMessages()['fourthline']));
 				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['bottom']);
-				      $this->getServer()->broadcastMessage("\n");
 				      $this->getServer()->broadcastMessage(TF::RED.$this->getMessages()['advice']);
 		          return true;
 		      }elseif(strtolower($cmd->getName()) == 'guessgamesquare'){
 		          $num = mt_rand(1, 20);
               $this->information = ['behavior' => 2, 'solution' => $num * $num];
-				      $this->getServer()->broadcastMessage("\n");
 				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['header']);
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['firstline']));
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['secondline']));
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['thirdline']));
 				      $this->getServer()->broadcastMessage(TF::AQUA.TF::BOLD.str_ireplace('{value}', sqrt($this->information['solution']), $this->getMessages()['Square']['fourthline']));
 				      $this->getServer()->broadcastMessage(TF::GOLD.TF::BOLD.$this->getMessages()['Square']['bottom']);
-				      $this->getServer()->broadcastMessage("\n");
 				      $this->getServer()->broadcastMessage(TF::RED.$this->getMessages()['advice']);
 					    return true;
 		      }

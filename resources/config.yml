@@ -16,7 +16,7 @@ Item: '265:0:10'
 SquareItem: '322:0:1'
 
 # Time which a player needs to wait until the plugins checks the answer (In seconds)
-Timer: 5
+Timer: 2
 
 # Enable Auto Update?
 Auto-Update: true
