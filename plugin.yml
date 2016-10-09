@@ -9,11 +9,12 @@ commands:
  guessgame:
   description: Main command of GuessTheNumber
   usage: /guessgame <normal|square|plus|minus|abort|solution>
-  permission: guessthenumber.normal
+  permission: guessthenumber.cmd
 permissions:
  guessthenumber:
   description: Main Permission Node
   children:
+   guessthenumber.cmd:
    guessthenumber.normal:
     description: Permission for "/guessgame normal"
    guessthenumber.square:
