@@ -8,15 +8,21 @@ Language: deu
 Min: 1
 Max: 100
 
-# Prize which the winner gets for a '/guessgame' quiz (normal)
+# Prize which the winner gets for a '/guessgame normal' quiz (normal)
 # Example: 265:0:10 // ID:Damage:Amount
 Item: '265:0:10'
 
-# Prize which the winner gets for a '/guessgamesquare' quiz (squares)
+# Prize which the winner gets for a '/guessgame square' quiz (squares)
 SquareItem: '322:0:1'
 
+# Prize which the winner gets for a '/guessgame plus' quiz (plus)
+PlusItem: '351:4:22'
+
+# Prize which the winner gets for a '/guessgame minus' quiz (minus)
+MinusItem: '264:0:1'
+
 # Time which a player needs to wait until the plugins checks the answer (In seconds)
-Timer: 2
+Timer: 3
 
 # Enable Auto Update?
 Auto-Update: true
