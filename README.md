@@ -4,10 +4,12 @@ A PocketMine-MP plugin which makes you able to do random number quizes. First pl
 
 | Command | Permission Node | Information |
 |---------|------------|-------------|
-|/guessgame|guessthenumber.normal|Starts a Normal Guessing Game!|
+|/guessgame | guessthenumber.cmd | main command
 |
-|/guessgamesquare|guessthenumber.square|Starts an Advanced Guessing Game!|
+|/guessgame normal|guessthenumber.normal|Starts a Normal Guessing Game!|
 |
-|/guessgamesolution|guessthenumber.solution|Gives the user the solution to the current task.|
+|/guessgame square|guessthenumber.square|Starts an Advanced Guessing Game!|
 |
-|/guessgameabort|guessthenumber.abort|Aborts the active guessing game.|
+|/guessgame solution|guessthenumber.solution|Gives the user the solution to the current task.|
+|
+|/guessgame abort|guessthenumber.abort|Aborts the active guessing game.|
