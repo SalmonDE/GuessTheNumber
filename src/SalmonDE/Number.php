@@ -137,6 +137,7 @@ class Number extends PluginBase implements Listener
 		  foreach($this->queue as $taskid){
 				  $this->getServer()->getScheduler()->cancelTask($taskid);
 			}
+			unset($this->queue);
 		  $name = $winner->getDisplayName();
 		  if($this->information['behavior'] == 1){
 			    foreach($this->getServer()->getOnlinePlayers() as $player){
