@@ -40,7 +40,8 @@ class Number extends PluginBase implements Listener
 	}
 
 	public function onCommand(CommandSender $sender, Command $cmd, $label, array $args){
-		  if(count($args) <> 1){
+		  if(count($args) === 1){
+				  var_dump($args);
 		      if(strtolower($args[0]) == 'solution'){
               if($sender->hasPermission('guessthenumber.solution')){
 				          if(isset($this->information)){
