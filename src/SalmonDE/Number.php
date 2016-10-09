@@ -50,20 +50,19 @@ class Number extends PluginBase implements Listener
 					            $sender->sendMessage(TF::RED.$this->getMessages()['nogameactive']);
 				          }
 			        }
+			        return true;
 		      }elseif(strtolower($args[0]) == 'abort'){
 				      if($sender->hasPermission('guessthenumber.abort')){
 					        if(isset($this->information)){
 					            unset($this->information);
 				              $this->getServer()->broadcastMessage(TF::RED.TF::BOLD.$this->getMessages()['gameaborted']);
-						          return true;
 					        }else{
 						          $sender->sendMessage(TF::GOLD.$this->getMessages()['nogameactive']);
-						          return true;
 					        }
 				        }else{
 					          $sender->sendMessage(TF::GOLD.$this->getMessages()['nogameactive']);
-					          return true;
 				        }
+			                return true;
 		      }elseif(isset($this->information)){
 			        $sender->sendMessage(TF::RED.$this->getMessages()['gamealreadyactive']);
 		      }else{
