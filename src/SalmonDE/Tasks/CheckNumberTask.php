@@ -24,7 +24,7 @@ class CheckNumberTask extends PluginTask
 		    if($this->msg == $this->information['solution']){
 				    $this->getOwner()->givePrize($this->player);
 			  }else{
-            $this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition()));
+            $this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition(), $this->player));
             if($this->information['behavior'] == 1 && $this->msg > $this->max){
 				        $this->player->sendMessage(TF::RED.str_ireplace(['{min}', '{max}'], [$this->min, $this->max],$this->lang['numtoohigh']));
             }else{

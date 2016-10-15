@@ -21,7 +21,6 @@ class Number extends PluginBase implements Listener
 {
 
 	public function onEnable(){
-		  $this->getServer()->getScheduler()->scheduleAsyncTask(new CheckVersionTask($this));
 	    @mkdir($this->getDataFolder());
 	    $this->saveResource('config.yml');
 			if(!file_exists($this->getDataFolder().'messages.ini')){
@@ -31,6 +30,7 @@ class Number extends PluginBase implements Listener
 			$this->min = $this->getConfig()->get('Min');
 			$this->max = $this->getConfig()->get('Max');
 		  $this->getServer()->getPluginManager()->registerEvents($this, $this);
+			$this->getServer()->getScheduler()->scheduleAsyncTask(new CheckVersionTask($this));
 	}
 
   public function getMessages(){
@@ -181,7 +181,7 @@ class Number extends PluginBase implements Listener
 			unset($this->queue);
 		  $name = $winner->getDisplayName();
 			foreach($this->getServer()->getOnlinePlayers() as $player){
-					$player->getLevel()->addSound(new FizzSound($player->getPosition()));
+					$player->getLevel()->addSound(new FizzSound($player->getPosition(), $player));
 			}
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.str_replace('{value}', $name, $this->getMessages()['congratulation']));
 		  if($this->information['behavior'] == 1){
