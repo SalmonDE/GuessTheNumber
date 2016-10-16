@@ -2,7 +2,8 @@
 
 # Languages available:
 # deu (Deutsch)
-Language: deu
+# eng (English)
+Language: eng
 
 # Min/Max Numbers for a normal guessing game
 Min: 1
