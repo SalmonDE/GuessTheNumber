@@ -64,6 +64,7 @@ class Number extends PluginBase implements Listener
 			                return true;
 		      }elseif(isset($this->information)){
 			        $sender->sendMessage(TF::RED.$this->getMessages()['gamealreadyactive']);
+							return true;
 		      }else{
 		          if(strtolower($args[0]) == 'normal'){
                   $this->information = ['behavior' => 1, 'solution' => mt_rand($this->min, $this->max)];
