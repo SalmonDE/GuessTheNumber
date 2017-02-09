@@ -1,5 +1,5 @@
 <?php
-namespace SalmonDE\Tasks;
+namespace SalmonDE\GuessTheNumber\Tasks;
 
 use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\Player;
@@ -25,7 +25,7 @@ class CheckNumberTask extends PluginTask
 				    $this->getOwner()->givePrize($this->player);
 			  }else{
             $this->player->getLevel()->addSound(new AnvilFallSound($this->player->getPosition(), $this->player));
-            if($this->information['behavior'] == 1 && $this->msg > $this->max){
+            if($this->information['behavior'] === 1 && $this->msg > $this->max){
 				        $this->player->sendMessage(TF::RED.str_ireplace(['{min}', '{max}'], [$this->min, $this->max],$this->lang['numtoohigh']));
             }else{
 				        $this->player->sendMessage(TF::GOLD.$this->lang['notright']);

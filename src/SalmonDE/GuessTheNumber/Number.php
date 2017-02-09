@@ -1,5 +1,5 @@
 <?php
-namespace SalmonDE;
+namespace SalmonDE\GuessTheNumber;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -13,7 +13,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\utils\Utils;
-use SalmonDE\Tasks\CheckNumberTask;
+use SalmonDE\GuessTheNumber\Tasks\CheckNumberTask;
 
 class Number extends PluginBase implements Listener
 {
