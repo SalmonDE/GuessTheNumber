@@ -14,8 +14,6 @@ use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\utils\Utils;
 use SalmonDE\Tasks\CheckNumberTask;
-use SalmonDE\Updater\CheckVersionTask;
-use SalmonDE\Updater\UpdaterTask;
 
 class Number extends PluginBase implements Listener
 {
@@ -30,8 +28,12 @@ class Number extends PluginBase implements Listener
 			$this->min = $this->getConfig()->get('Min');
 			$this->max = $this->getConfig()->get('Max');
 		  $this->getServer()->getPluginManager()->registerEvents($this, $this);
-			$this->getServer()->getScheduler()->scheduleAsyncTask(new CheckVersionTask($this));
+			$this->runUpdateManager();
 	}
+
+	public function runUpdateManager(){
+	    \SalmonDE\Updater\UpdateManager::getNew($this->getFile(), $this, $this->getConfig()->get('Auto-Update'))->start();
+  }
 
   public function getMessages(){
 		  if(file_exists($this->getDataFolder().'messages.ini')){
@@ -211,9 +213,5 @@ class Number extends PluginBase implements Listener
 			}
 			$winner->getInventory()->addItem(new Item($item[0], $item[1], $item[2]));
 			$winner->sendMessage(TF::GREEN.TF::BOLD.str_replace(['{count}', '{itemname}'], [$item[2], $itemname], $this->getMessages()['winnermessage']));
-	}
-
-	public function update(){
-			$this->getServer()->getScheduler()->scheduleTask(new UpdaterTask($this, $this->getDescription()->getVersion()));
 	}
 }
