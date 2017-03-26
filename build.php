@@ -19,6 +19,10 @@ if(count(glob('plugins/DevTools/GuessTheNumber*.phar')) === 0){
 }else{
     $fn = glob('plugins/DevTools/GuessTheNumber*');
     rename($fn[0], 'plugins/DevTools/GuessTheNumber.phar');
+    $phar = new Phar(__DIR__.'/plugins/DevTools/GuessTheNumber.phar');
+    $phar->startBuffering();
+    $phar->compress(Phar::GZ);
+    $phar->stopBuffering();
     echo "GuessTheNumber.phar created!\n";
     exit(0);
 }
