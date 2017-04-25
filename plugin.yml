@@ -1,5 +1,5 @@
 name: GuessTheNumber
-version: 2.1.9
+version: 2.1.10
 api: [2.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4, 3.0.0-ALPHA5]
 main: SalmonDE\GuessTheNumber\Number
 description: Guessing Game for your Server!

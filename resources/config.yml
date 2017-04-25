@@ -24,9 +24,3 @@ MinusItem: '264:0:1'
 
 # Time which a player needs to wait until the plugins checks the answer (In seconds)
 Timer: 3
-
-# Enable Auto Update?
-Auto-Update: true
-# Report bugs here: https://github.com/SalmonCraftPE/GuessTheNumber/issues/
-# Have fun with this plugin! :)
-# ~ SalmonDE

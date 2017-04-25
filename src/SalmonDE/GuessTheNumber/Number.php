@@ -28,12 +28,8 @@ class Number extends PluginBase implements Listener
 			$this->min = $this->getConfig()->get('Min');
 			$this->max = $this->getConfig()->get('Max');
 		  $this->getServer()->getPluginManager()->registerEvents($this, $this);
-			$this->runUpdateManager();
+        $updateManager = new \SalmonDE\Updater\UpdateManager($this);
 	}
-
-	public function runUpdateManager(){
-	    \SalmonDE\Updater\UpdateManager::getNew($this->getFile(), $this, $this->getConfig()->get('Auto-Update'))->start();
-  }
 
   public function getMessages(){
 		  if(file_exists($this->getDataFolder().'messages.ini')){
