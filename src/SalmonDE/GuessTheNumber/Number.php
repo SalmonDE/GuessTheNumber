@@ -180,7 +180,7 @@ class Number extends PluginBase implements Listener
 			unset($this->queue);
 		  $name = $winner->getDisplayName();
 			foreach($this->getServer()->getOnlinePlayers() as $player){
-					$player->getLevel()->addSound(new FizzSound($player->getPosition(), $player));
+					$player->getLevel()->addSound(new FizzSound($player->getPosition()), [$player]);
 			}
 			$this->getServer()->broadcastMessage(TF::GREEN.TF::BOLD.str_replace('{value}', $name, $this->getMessages()['congratulation']));
 		  if($this->information['behavior'] == 1){
