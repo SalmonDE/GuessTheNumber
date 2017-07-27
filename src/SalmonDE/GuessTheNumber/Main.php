@@ -25,6 +25,60 @@ class Main extends PluginBase implements Listener {
 
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
     }
+
+    public function createGame(int $gameType): NumberGame{
+        $allPrizes = $this->getConfig()->get('prizes');
+
+        switch($gameType){
+            case NumberGame::RANDOM_INT_GAME:
+                $options = $this->getConfig()->get('randomInteger');
+                $prizes = $allPrizes['randomIntegerItems'];
+
+                break;
+
+            case NumberGame::EXPONENT_GAME:
+                $options = $this->getConfig()->get('exponent');
+                $prizes = $allPrizes['exponentItems'];
+
+                break;
+
+            case NumberGame::ADDITION_GAME:
+                $options = $this->getConfig()->get('addition');
+                $prizes = $allPrizes['additionItems'];
+
+                break;
+
+            case NumberGame::SUBTRACTION_GAME:
+                $options = $this->getConfig()->get('subtraction');
+                $prizes = $allPrizes['subtractionItems'];
+
+                break;
+
+            case NumberGame::MULTIPLICATION_GAME:
+                $options = $this->getConfig()->get('multiplication');
+                $prizes = $allPrizes['multiplicationItems'];
+
+                break;
+
+            case NumberGame::DIVISION_GAME:
+                $options = $this->getConfig()->get('division');
+                $prizes = $allPrizes['divisionItems'];
+
+                break;
+
+            case NumberGame::FACTORIAL_GAME:
+                $options = $this->getConfig()->get('factorial');
+                $prizes = $allPrizes['factorialItems'];
+
+                break;
+
+            default:
+                $options = [];
+                $prizes = [];
+        }
+
+        return new NumberGame($gameType, (array) $options, (array) $prizes);
+    }
     
     public function startGame(NumberGame $game): bool{
         if($this->isGameRunning()){
@@ -32,6 +86,7 @@ class Main extends PluginBase implements Listener {
         }
 
         $this->currentGame = $game;
+        //announce the game
 
         return true;
     }
@@ -74,6 +129,7 @@ class Main extends PluginBase implements Listener {
     public function onChat(PlayerChatEvent $event){
         if($this->isGameRunning() && $event->getMessage()){
             // check decimal mark
+            // check thousands separator
         }
     }
 

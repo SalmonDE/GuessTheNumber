@@ -23,17 +23,21 @@ class NumberGame {
     private $secondInt = null;
     private $secondIntMin = null;
     private $secondIntMax = null;
-    protected $prizes = [];
+    protected $itemPrizes = [];
 
-    public function __construct(int $gameType = 0, array $options = []){
+    public function __construct(int $gameType = 0, array $options, array $prizes = []){
         if($gameType < 1 and $gameType > 6){
             throw new \InvalidArgumentException('Invalid game type specified: '.$gameType);
         }
 
+        if(empty($options)){
+            throw new \InvalidArgumentException('Options array can\'t be empty!');
+        }
+
         $this->gameType = $gameType;
 
-        foreach($options as $itemString){
-            $this->prizes[] = new Item(...explode(':', $itemString));
+        foreach($prizes as $itemString){
+            $this->itemPrizes[] = new Item(...explode(':', $itemString));
         }
 
         $this->initGame($options);
@@ -112,8 +116,9 @@ class NumberGame {
             case self::FACTORIAL_GAME:
                 $this->firstIntMin = $options['min'];
                 $this->firstIntMax = $options['max'];
+                $this->firstInt = random_int($this->firstIntMin, $this->firstIntMax);
 
-                $this->solution = gmp_fac(random_int($this->firstIntMin, $this->firstIntMax));
+                $this->solution = gmp_fac($this->firstInt);
                 break;
 
             default:
@@ -152,8 +157,20 @@ class NumberGame {
         return $this->secondMax;
     }
 
-    public function getPrizes(): array{
-        return $this->prizes;
+    public function getItemPrizes(): array{
+        return $this->itemPrizes;
+    }
+
+    public function setItemPrizes(array $prizes){
+        $itemPrizes = [];
+
+        foreach($prizes as $prize){
+            if($prize instanceof Item){
+                $itemPrizes[] = $prize;
+            }
+        }
+
+        $this->itemPrizes = $itemPrizes;
     }
 
     public function getSolution(): float{
@@ -161,16 +178,16 @@ class NumberGame {
     }
 
     public function isSolution(float $number): bool{
-        return (float) $this->solution === $number;
+        return ((float) $this->solution) == ((float) $number);
     }
 
     public function givePrizes(Player $player, Main $plugin){
         $prizeListMessage = $plugin->getMessage('prizeList.header');
 
-        foreach($this->prizes as $prizeItem){
-            $prizeListMessage .= "\n".$prizeItem->getName().' x '.$prizeItem->getCount();
+        foreach($this->itemPrizes as $itemPrize){
+            $prizeListMessage .= "\n".$itemPrize->getName().' x '.$itemPrize->getCount();
 
-            $player->getInventory()->addItem(clone $prizeItem);
+            $player->getInventory()->addItem(clone $itemPrize);
         }
 
         $player->sendMessage($prizeListMessage);
