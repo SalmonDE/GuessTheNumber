@@ -2,35 +2,29 @@ name: GuessTheNumber
 version: 3.0.0
 api: [3.0.0-ALPHA7]
 author: SalmonDE
-main: SalmonDE\GuessTheNumber\Number
+main: SalmonDE\GuessTheNumber\Main
 description: Chat games about simple maths and guessing
 permissions:
     guessthenumber:
         description: Main permission node
         children:
             guessthenumber.play:
+                default: true
                 children:
                     guessthenumber.play.randomint:
                         description: Permission to take part in a random integer game
-                        default: true
                     guessthenumber.play.exponent:
                         description: Permission to take part in an exponent game
-                        default: true
                     guessthenumber.play.addition:
                         description: Permission to take part in an addition game
-                        default: true
                     guessthenumber.play.subtraction:
                         description: Permission to take part in a subtraction game
-                        default: true
                     guessthenumber.play.multiplication:
                         description: Permission to take part in a multiplication game
-                        default: true
                     guessthenumber.play.division:
                         description: Permission to take part in a division game
-                        default: true
                     guessthenumber.play.factorial:
                         description: Permission to take part in a factorial game
-                        default: true
             guessthenumber.cmd:
                 children:
                     guessthenumber.cmd.randomint:

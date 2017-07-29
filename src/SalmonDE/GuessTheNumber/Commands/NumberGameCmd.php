@@ -14,8 +14,8 @@ use SalmonDE\GuessTheNumber\NumberGame;
 
 class NumberGameCmd extends PluginCommand implements CommandExecutor {
 
-    public function __construct(Main $plugin){
-        parent::__construct($plugin);
+    public function __construct(Main $owner){
+        parent::__construct('numbergame', $owner);
         $this->setExecutor($this);
         $this->setPermission('guessthenumber.cmd');
         $this->setUsage('/numbergame <rand|exp|add|sub|multi|div|fac|solution|abort>');
@@ -23,7 +23,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool{
-        switch(strtolower($args[0]) ?? null){
+        switch(strtolower($args[0] ?? '')){
             case 'rand':
                 if($sender->hasPermission('guessthenumber.cmd.randomint')){
                     $this->startGame(NumberGame::RANDOM_INT_GAME, $sender);

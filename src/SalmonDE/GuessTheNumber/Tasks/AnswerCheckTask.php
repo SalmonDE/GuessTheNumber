@@ -39,4 +39,8 @@ class AnswerCheckTask extends PluginTask {
         }
     }
 
+    public function getNumber(): float{
+        return $this->number;
+    }
+
 }

@@ -7,7 +7,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat as TF;
 
-class NumberGame {
+class NumberGame { // split this up into multiple classes and keep this as parent class
 
     const UNKNOWN_GAME = 0;
     const RANDOM_INT_GAME = 1;
@@ -17,6 +17,7 @@ class NumberGame {
     const MULTIPLICATION_GAME = 5;
     const DIVISION_GAME = 6;
     const FACTORIAL_GAME = 7;
+    //const PATTERN_SEARCH_GAME = 8; ToDo
 
     private $gameType = self::UNKNOWN_GAME;
     protected $name;

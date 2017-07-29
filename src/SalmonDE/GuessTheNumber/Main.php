@@ -7,10 +7,11 @@ use InvalidStateException;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\lang\BaseLang;
+use pocketmine\level\sound\ClickSound;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as TF;
-use pocketmine\level\sound\ClickSound;
+use SalmonDE\GuessTheNumber\Commands\NumberGameCmd;
 use SalmonDE\GuessTheNumber\Tasks\AnswerCheckTask;
 
 class Main extends PluginBase implements Listener {
@@ -20,16 +21,20 @@ class Main extends PluginBase implements Listener {
     private $baseLang;
     private $decimalMark = '.';
     private $thousandSeparator = ',';
+    private $checkTasks = []; // needed so players can't spam with answers
 
     public function onEnable(){
         $this->saveResource('config.yml');
-        $this->saveResource($this->getConfig()->get('language'));
+        $this->saveResource('eng.ini'); // fallback
+        $this->saveResource($this->getConfig()->get('language').'.ini');
 
         $this->timer = (float) $this->getConfig()->get('timer') * 20;
-        $this->baseLang = new BaseLang($this->getConfig()->get('language'), $this->getDataFolder());
+        $this->baseLang = new BaseLang($this->getConfig()->get('language'), $this->getDataFolder(), 'eng');
 
         $this->decimalMark = $this->baseLang->get('chat.decimalMark');
         $this->thousandSeparator = $this->baseLang->get('chat.thousandSeparator');
+
+        $this->getServer()->getCommandMap()->register('guessthenumber', new NumberGameCmd($this), 'numbergame');
 
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
     }
@@ -120,6 +125,9 @@ class Main extends PluginBase implements Listener {
 
     public function stopGame(): bool{
         if($this->isGameRunning()){
+            $this->getServer()->getScheduler()->cancelTasks($this);
+            $this->checkTasks = [];
+
             $this->getServer()->broadcastMessage(TF::GOLD.$this->getMessage('general.stop'));
 
             $this->currentGame = null;
@@ -166,14 +174,23 @@ class Main extends PluginBase implements Listener {
                     $event->getPlayer()->sendMessage(TF::RED.$this->getMessage('general.notAllowedToPlay'));
                 }
 
-                $number = floatval($msg);
-                $this->getServer()->getScheduler()->scheduleDelayedTask(new AnswerCheckTask($this, $event->getPlayer(), $number), $this->timer);
+                if($task = $this->checkTasks[$event->getPlayer()->getName()] ?? false){
+                    $number = floatval($msg);
+                    $this->getServer()->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this, $event->getPlayer(), $number), $this->timer);
+                    $this->checkTasks[$event->getPlayer()->getName()] = $task;
 
-                $event->getPlayer()->sendMessage('general.checking', $this->timer / 20);
+                    $event->getPlayer()->sendMessage('general.checking', $this->timer / 20);
+                }else{
+                    $event->getPlayer()->sendMessage('general.alreadyChecking', $task->getNumber());
+                }
 
                 $event->setCancelled();
             }
         }
+    }
+
+    public function getTasks(): array{
+        return $this->checkTasks;
     }
 
     public function canPlay(Player $player, int $gameType): bool{
