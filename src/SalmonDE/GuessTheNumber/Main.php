@@ -9,6 +9,8 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\lang\BaseLang;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\TextFormat as TF;
+use pocketmine\level\sound\ClickSound;
 use SalmonDE\GuessTheNumber\Tasks\AnswerCheckTask;
 
 class Main extends PluginBase implements Listener {
@@ -38,52 +40,61 @@ class Main extends PluginBase implements Listener {
         switch($gameType){
             case NumberGame::RANDOM_INT_GAME:
                 $name = $this->getMessage('game.randomInteger');
+                $example = $this->getMessage('game.randomInteger.example');
                 $options = $this->getConfig()->get('randomInteger');
                 $prizes = $allPrizes['randomIntegerItems'];
                 break;
 
             case NumberGame::EXPONENT_GAME:
                 $name = $this->getMessage('game.exponent');
+                $example = $this->getMessage('game.exponent.example');
                 $options = $this->getConfig()->get('exponent');
                 $prizes = $allPrizes['exponentItems'];
                 break;
 
             case NumberGame::ADDITION_GAME:
                 $name = $this->getMessage('game.addition');
+                $example = $this->getMessage('game.addition.example');
                 $options = $this->getConfig()->get('addition');
                 $prizes = $allPrizes['additionItems'];
                 break;
 
             case NumberGame::SUBTRACTION_GAME:
                 $name = $this->getMessage('game.subtraction');
+                $example = $this->getMessage('game.subtraction.example');
                 $options = $this->getConfig()->get('subtraction');
                 $prizes = $allPrizes['subtractionItems'];
                 break;
 
             case NumberGame::MULTIPLICATION_GAME:
                 $name = $this->getMessage('game.multiplication');
+                $example = $this->getMessage('game.multiplication.example');
                 $options = $this->getConfig()->get('multiplication');
                 $prizes = $allPrizes['multiplicationItems'];
                 break;
 
             case NumberGame::DIVISION_GAME:
                 $name = $this->getMessage('game.division');
+                $example = $this->getMessage('game.division.example');
                 $options = $this->getConfig()->get('division');
                 $prizes = $allPrizes['divisionItems'];
                 break;
 
             case NumberGame::FACTORIAL_GAME:
                 $name = $this->getMessage('game.factorial');
+                $example = $this->getMessage('game.factorial.example');
                 $options = $this->getConfig()->get('factorial');
                 $prizes = $allPrizes['factorialItems'];
                 break;
 
             default:
+                $name = 'Unknown';
                 $options = [];
                 $prizes = [];
+                $example = '';
         }
 
-        return new NumberGame($gameType, (string) $name, (array) $options, (array) $prizes);
+        return new NumberGame($gameType, (string) $name, (string) $example, (array) $options, (array) $prizes);
     }
 
     public function startGame(NumberGame $game): bool{
@@ -91,9 +102,18 @@ class Main extends PluginBase implements Listener {
             return false;
         }
 
-        $this->currentGame = $game;
+        $msg = TF::GREEN.TF::BOLD.$this->getMessage('game.startHeader', $game->getName()).TF::RESET."\n";
+        $msg .= $this->getMessage('game.equation', $game->getCalculation()).TF::RESET."\n";
+        $msg .= $this->getMessage('game.example', $game->getExample()).TF::RESET."\n";
+        $msg .= $this->getMessage('game.howTo').TF::RESET;
 
-        // Announce the game
+        foreach($this->getServer()->getOnlinePlayers() as $player){
+            $player->getLevel()->addSound(new ClickSound($player), [$player]);
+            $player->addTitle('', $game->getName());
+            $player->sendMessage($msg);
+        }
+
+        $this->currentGame = $game;
 
         return true;
     }

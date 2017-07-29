@@ -20,17 +20,18 @@ class NumberGame {
 
     private $gameType = self::UNKNOWN_GAME;
     protected $name;
-    private $solution = null;
-    private $calculation = null;
-    private $firstInt = null;
-    private $firstIntMin = null;
-    private $firstIntMax = null;
-    private $secondInt = null;
-    private $secondIntMin = null;
-    private $secondIntMax = null;
+    protected $example;
+    protected $solution = null;
+    protected $calculation = null;
+    protected $firstInt = null;
+    protected $firstIntMin = null;
+    protected $firstIntMax = null;
+    protected $secondInt = null;
+    protected $secondIntMin = null;
+    protected $secondIntMax = null;
     protected $itemPrizes = [];
 
-    public function __construct(int $gameType = 0, string $name, array $options, array $prizes = []){
+    public function __construct(int $gameType = 0, string $name, string $example, array $options, array $prizes = []){
         if($gameType < 1 and $gameType > 6){
             throw new InvalidArgumentException('Invalid game type specified: '.$gameType);
         }
@@ -175,6 +176,10 @@ class NumberGame {
 
     public function getItemPrizes(): array{
         return $this->itemPrizes;
+    }
+
+    public function getExample(): string{
+        return $this->example;
     }
 
     public function getCalculation(): string{
