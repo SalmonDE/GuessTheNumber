@@ -1,8 +1,11 @@
 <?php
 namespace SalmonDE\GuessTheNumber;
 
-use pocketmine\Player;
+use InvalidArgumentException;
 use pocketmine\item\Item;
+use pocketmine\Player;
+use pocketmine\Server;
+use pocketmine\utils\TextFormat as TF;
 
 class NumberGame {
 
@@ -16,7 +19,9 @@ class NumberGame {
     const FACTORIAL_GAME = 7;
 
     private $gameType = self::UNKNOWN_GAME;
+    protected $name;
     private $solution = null;
+    private $calculation = null;
     private $firstInt = null;
     private $firstIntMin = null;
     private $firstIntMax = null;
@@ -25,16 +30,17 @@ class NumberGame {
     private $secondIntMax = null;
     protected $itemPrizes = [];
 
-    public function __construct(int $gameType = 0, array $options, array $prizes = []){
+    public function __construct(int $gameType = 0, string $name, array $options, array $prizes = []){
         if($gameType < 1 and $gameType > 6){
-            throw new \InvalidArgumentException('Invalid game type specified: '.$gameType);
+            throw new InvalidArgumentException('Invalid game type specified: '.$gameType);
         }
 
         if(empty($options)){
-            throw new \InvalidArgumentException('Options array can\'t be empty!');
+            throw new InvalidArgumentException('Options array can\'t be empty!');
         }
 
         $this->gameType = $gameType;
+        $this->name = $name;
 
         foreach($prizes as $itemString){
             $this->itemPrizes[] = new Item(...explode(':', $itemString));
@@ -62,6 +68,7 @@ class NumberGame {
                 $this->secondIntMax = (int) $options['exponentMax'];
                 $this->secondInt = random_int($this->secondIntMin, $this->secondIntMax); // exponent
 
+                $this->calculation = "({$this->firstInt})^{$this->secondInt}";
                 $this->solution = $this->firstInt ** $this->secondInt;
                 break;
 
@@ -74,6 +81,7 @@ class NumberGame {
                 $this->secondIntMax = &$this->firstIntMax;
                 $this->secondInt = random_int($this->secondIntMin, $this->secondIntMax);
 
+                $this->calculation = $this->firstInt.' + '.$this->secondInt;
                 $this->solution = $this->firstInt + $this->secondInt;
                 break;
 
@@ -86,6 +94,7 @@ class NumberGame {
                 $this->secondIntMax = &$this->firstIntMax;
                 $this->secondInt = random_int($this->secondIntMin, $options['allowNegativeSolution'] ? $this->secondIntMax : $this->firstInt);
 
+                $this->calculation = $this->firstInt.' - '.$this->secondInt;
                 $this->solution = $this->firstInt - $this->secondInt;
                 break;
 
@@ -98,6 +107,7 @@ class NumberGame {
                 $this->secondIntMax = &$this->firstIntMax;
                 $this->secondInt = random_int($this->secondIntMin, $this->secondIntMax);
 
+                $this->calculation = $this->firstInt.' * '.$this->secondInt;
                 $this->solution = $this->firstInt * $this->secondInt;
                 break;
 
@@ -110,6 +120,7 @@ class NumberGame {
                 $this->secondIntMax = (int) $options['divisortMax'];
                 $this->secondInt = random_int($this->secondIntMin, $this->secondIntMax);
 
+                $this->calculation = $this->firstInt.' / '.$this->secondInt;
                 $this->solution = $this->firstInt / $this->secondInt;
                 break;
 
@@ -118,11 +129,12 @@ class NumberGame {
                 $this->firstIntMax = $options['max'];
                 $this->firstInt = random_int($this->firstIntMin, $this->firstIntMax);
 
+                $this->calculation = $this->firstInt.'!';
                 $this->solution = gmp_fac($this->firstInt);
                 break;
 
             default:
-                $plugin = \pocketmine\Server::getInstance()->getPluginManager()->getPlugin('GuessTheNumber');
+                $plugin = Server::getInstance()->getPluginManager()->getPlugin('GuessTheNumber');
                 $plugin->critical('Unknown game type! Stopping the game ...');
                 $plugin->stopGame();
                 break;
@@ -131,6 +143,10 @@ class NumberGame {
 
     final public function getType(): int{
         return $this->gameType;
+    }
+
+    public function getName(): string{
+        return $this->name;
     }
 
     public function getFirstNumber(): int{
@@ -161,6 +177,18 @@ class NumberGame {
         return $this->itemPrizes;
     }
 
+    public function getCalculation(): string{
+        return $this->calculation;
+    }
+
+    public function getSolution(): float{
+        return $this->solution;
+    }
+
+    public function isSolution(float $number): bool{
+        return ((float) $this->solution) == ((float) $number);
+    }
+
     public function setItemPrizes(array $prizes){
         $itemPrizes = [];
 
@@ -173,19 +201,11 @@ class NumberGame {
         $this->itemPrizes = $itemPrizes;
     }
 
-    public function getSolution(): float{
-        return $this->solution;
-    }
-
-    public function isSolution(float $number): bool{
-        return ((float) $this->solution) == ((float) $number);
-    }
-
     public function givePrizes(Player $player, Main $plugin){
-        $prizeListMessage = $plugin->getMessage('prizeList.header');
+        $prizeListMessage = TF::GREEN.TF::BOLD.$plugin->getMessage('prizeList.header').TF::RESET;
 
         foreach($this->itemPrizes as $itemPrize){
-            $prizeListMessage .= "\n".$itemPrize->getName().' x '.$itemPrize->getCount();
+            $prizeListMessage .= "\n".TF::AQUA.$plugin->getMessage('prizeList.item', $itemPrize->getName(), $itemPrize->getCount()).TF::RESET;
 
             $player->getInventory()->addItem(clone $itemPrize);
         }

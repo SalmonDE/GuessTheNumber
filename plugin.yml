@@ -13,13 +13,13 @@ permissions:
                     guessthenumber.play.randomint:
                         description: Permission to take part in a random integer game
                         default: true
-                    guessthenumber.play.square:
-                        description: Permission to take part in a square game
+                    guessthenumber.play.exponent:
+                        description: Permission to take part in an exponent game
                         default: true
                     guessthenumber.play.addition:
-                        description: Permission to take part in a addition game
+                        description: Permission to take part in an addition game
                         default: true
-                    guessthenumber.play.minus:
+                    guessthenumber.play.subtraction:
                         description: Permission to take part in a subtraction game
                         default: true
                     guessthenumber.play.multiplication:
@@ -35,8 +35,8 @@ permissions:
                 children:
                     guessthenumber.cmd.randomint:
                         description: Permission to start a random integer game
-                    guessthenumber.cmd.square:
-                        description: Permission to start a square game
+                    guessthenumber.cmd.exponent:
+                        description: Permission to start an exponent game
                     guessthenumber.cmd.addition:
                         description: Permission to start an addition game
                     guessthenumber.cmd.subtraction:

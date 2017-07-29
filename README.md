@@ -1,4 +1,4 @@
-# GuessTheNumber
+# GuessTheNumber Outdated README file
 [![Build Status](https://travis-ci.org/SalmonDE/GuessTheNumber.svg?branch=master)](https://travis-ci.org/SalmonGER/GuessTheNumber)</br>
 A PocketMine-MP plugin which makes you able to do random number quizes. First player which get's the right answer wins! :)
 
