@@ -18,7 +18,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
         parent::__construct('numbergame', $owner);
         $this->setExecutor($this);
         $this->setPermission('guessthenumber.cmd');
-        $this->setUsage('/numbergame <rand|exp|add|sub|multi|div|fac|solution|abort>');
+        $this->setUsage('/numbergame <rand|exp|add|sub|multi|div|fact|solution|abort>');
         $this->setDescription('Main command of GuessTheNumber');
     }
 
@@ -72,7 +72,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
                 }
                 break;
 
-            case 'fac':
+            case 'fact':
                 if($sender->hasPermission('guessthenumber.cmd.factorial')){
                     $this->startGame(NumberGame::FACTORIAL_GAME, $sender);
                 }else{

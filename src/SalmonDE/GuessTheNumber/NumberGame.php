@@ -132,7 +132,7 @@ class NumberGame { // split this up into multiple classes and keep this as paren
                 $this->firstInt = random_int($this->firstIntMin, $this->firstIntMax);
 
                 $this->calculation = $this->firstInt.'!';
-                $this->solution = gmp_fac($this->firstInt);
+                $this->solution = gmp_fact($this->firstInt);
                 break;
 
             default:
