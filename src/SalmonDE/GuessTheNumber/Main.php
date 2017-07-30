@@ -3,8 +3,6 @@ declare(strict_types = 1);
 namespace SalmonDE\GuessTheNumber;
 
 use InvalidStateException;
-use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\lang\BaseLang;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as TF;
@@ -12,7 +10,6 @@ use SalmonDE\GuessTheNumber\Commands\NumberGameCmd;
 use SalmonDE\GuessTheNumber\Events\NumberGameRegisterEvent;
 use SalmonDE\GuessTheNumber\Events\NumberGameStartEvent;
 use SalmonDE\GuessTheNumber\Events\NumberGameStopEvent;
-use SalmonDE\GuessTheNumber\Events\PlayerAnswerEvent;
 use SalmonDE\GuessTheNumber\Games\AdditionGame;
 use SalmonDE\GuessTheNumber\Games\DivisionGame;
 use SalmonDE\GuessTheNumber\Games\ExponentGame;
@@ -21,15 +18,15 @@ use SalmonDE\GuessTheNumber\Games\MultiplicationGame;
 use SalmonDE\GuessTheNumber\Games\NumberGame;
 use SalmonDE\GuessTheNumber\Games\RandomIntegerGame;
 use SalmonDE\GuessTheNumber\Games\SubtractionGame;
-use SalmonDE\GuessTheNumber\Tasks\AnswerCheckTask;
 
-class Main extends PluginBase implements Listener {
+class Main extends PluginBase {
 
     private $currentGame = null;
     private $timer = 60;
     private $baseLang;
     private $decimalMark = '.';
     private $thousandSeparator = ',';
+    private $listener = null;
     private $answeringPlayers = [];
     private $gameTypes = [];
 
@@ -48,7 +45,7 @@ class Main extends PluginBase implements Listener {
 
         $this->getServer()->getCommandMap()->register('guessthenumber', new NumberGameCmd($this), 'numbergame');
 
-        $this->getServer()->getPluginManager()->registerEvents($this, $this);
+        $this->getServer()->getPluginManager()->registerEvents($this->listener ?? new MainListener($this), $this);
     }
 
     private function registerGames(){
@@ -186,16 +183,8 @@ class Main extends PluginBase implements Listener {
         return $this->timer;
     }
 
-    public function isAnswering(string $name): bool{
-        return $this->answeringPlayers[strtolower($name)] ?? false;
-    }
-
-    public function setAnswering(string $name, bool $value){
-        $this->answeringPlayers[strtolower($name)] = $value;
-    }
-
-    public function getAnsweringPlayers(): array{
-        return $this->answeringPlayers;
+    public function getListener(): MainListener{
+        return $this->listener;
     }
 
     public function getMessage(string $index, ...$args): string{
@@ -206,37 +195,11 @@ class Main extends PluginBase implements Listener {
         return $this->baseLang->translateString($index, $args);
     }
 
-    /**
-     * @priority MONITOR
-     */
-    public function onChat(PlayerChatEvent $event){
-        if($this->isGameRunning()){
-            if($this->getCurrentGame()->isValidAnswer($event->getMessage(), $this->decimalMark, $this->thousandSeparator)){
-                
-                if(!$event->getPlayer()->hasPermission($this->getCurrentGame()->getPermission())){
-                    $event->getPlayer()->sendMessage(TF::RED.$this->getMessage('general.notAllowedToPlay'));
-                    return;
-                }
+    public function getDecimalMark(): string{
+        return $this->decimalMark;
+    }
 
-                if($this->isAnswering($event->getPlayer()->getName())){
-                    $event->getPlayer()->sendMessage('general.alreadyChecking');
-                }else{
-                    $this->getServer()->getPluginManager()->callEvent($event = new PlayerAnswerEvent($this, $this->getCurrentGame(), $event->getPlayer(), $event->getMessage()));
-
-                    if(!$event->isCancelled()){
-                        $this->getServer()->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this, $event->getPlayer(), $event->getMessage()), $this->timer);
-                        $this->answeringPlayers[$event->getPlayer()->getLowerCaseName()] = true;
-
-                        $event->getPlayer()->sendMessage('general.checking', $this->timer / 20);
-                    }
-                }
-
-                if($event ?? false){
-                    $event->setCancelled(!$event->showChatMessage());
-                }else{
-                    $event->setCancelled();
-                }
-            }
-        }
+    public function getThousandSeparator(): string{
+        return $this->thousandSeparator;
     }
 }

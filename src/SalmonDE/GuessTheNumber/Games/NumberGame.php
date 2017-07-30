@@ -137,15 +137,14 @@ abstract class NumberGame {
                 }
 
                 $this->givePrizes($player, $plugin);
+                return true;
             }
-
-            return true;
-        }else{
-            $plugin->getServer()->getPluginManager()->callEvent(new PlayerFailEvent());
-
-            $player->sendMessage(TF::RED.$plugin->getMessage('answer.wrong'));
-            $player->getLevel()->addSound(new AnvilFallSound($player), [$player]);
         }
+
+        $plugin->getServer()->getPluginManager()->callEvent(new PlayerFailEvent());
+
+        $player->sendMessage(TF::RED.$plugin->getMessage('answer.wrong'));
+        $player->getLevel()->addSound(new AnvilFallSound($player), [$player]);
 
         return false;
     }
