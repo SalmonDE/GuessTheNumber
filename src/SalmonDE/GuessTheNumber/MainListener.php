@@ -56,7 +56,7 @@ class MainListener implements Listener {
                     $this->getServer()->getPluginManager()->callEvent($event = new PlayerAnswerEvent($this, $this->owner->getCurrentGame(), $event->getPlayer(), $event->getMessage()));
 
                     if(!$event->isCancelled()){
-                        $this->getServer()->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this->owner, $event->getPlayer(), $event->getMessage()), $this->owner->getTimer());
+                        $this->owner->getServer()->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this->owner, $event->getPlayer(), $event->getMessage()), $this->owner->getTimer());
                         $this->setAnswering($event->getPlayer()->getName());
 
                         $event->getPlayer()->sendMessage('general.checking', $this->timer / 20);
