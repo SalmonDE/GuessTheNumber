@@ -80,10 +80,8 @@ class MainListener implements Listener {
      * @priority MONITOR
      */
     public function onJoin(PlayerJoinEvent $event){
-        if(!$event->isCancelled()){
-            if($this->owner->isGameRunning()){
-                $this->owner->getCurrentGame()->announceGame($this->owner, [$event->getPlayer()]);
-            }
+        if($this->owner->isGameRunning()){
+            $this->owner->getCurrentGame()->announceGame($this->owner, [$event->getPlayer()]);
         }
     }
 
