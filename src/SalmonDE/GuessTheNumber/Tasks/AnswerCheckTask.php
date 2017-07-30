@@ -20,8 +20,8 @@ class AnswerCheckTask extends PluginTask {
 
     public function onRun(int $currentTicks){
         if($this->player->isOnline()){
-            $this->getOwner()->getCurrentGame()->checkAnswer($this->answer, $this->player, $this->getOwner());
             $this->getOwner()->getListener()->setAnswering($this->player->getName(), false);
+            $this->getOwner()->getCurrentGame()->checkAnswer($this->answer, $this->player, $this->getOwner());
         }
     }
 }

@@ -43,7 +43,7 @@ class ExponentGame extends NumberGame {
             $secondInt = random_int($this->secondIntMin, $this->secondIntMax);
         }
 
-        return '('.$firstInt.')^'.$secondInt.' = '.$firstInt ** $secondInt;
+        return '('.$firstInt.')^'.$secondInt.' = '.($firstInt ** $secondInt);
     }
 
 }
