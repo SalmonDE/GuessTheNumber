@@ -5,8 +5,8 @@ namespace SalmonDE\GuessTheNumber\Games;
 
 class PatternSearchGame extends NumberGame {
 
-    public function __construct(string $name, string $example, array $options, array $prizes, string $playPermission, string $startPermission){
-        parent::__construct($name, $example, $prizes, $playPermission, $startPermission);
+    public function __construct(string $name, array $options, array $prizes, string $playPermission, string $startPermission){
+        parent::__construct($name, $prizes, $playPermission, $startPermission);
 
     }
 
@@ -15,6 +15,10 @@ class PatternSearchGame extends NumberGame {
     }
 
     public function resetGame(){
+
+    }
+
+    public function getExample(): string{
 
     }
 }

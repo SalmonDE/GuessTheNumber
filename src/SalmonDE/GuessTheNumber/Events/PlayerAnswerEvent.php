@@ -30,7 +30,7 @@ class PlayerAnswerEvent extends GuessTheNumberEvent implements Cancellable {
         $this->answer = $answer;
     }
 
-    public function showChatMessage(bool $value){
+    public function showChatMessage(bool $value = true){
         $this->showInChat = $value;
     }
 

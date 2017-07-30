@@ -45,64 +45,57 @@ class Main extends PluginBase {
 
         $this->registerGames();
 
-        $this->getServer()->getPluginManager()->registerEvents($this->listener ?? new MainListener($this), $this);
+        $this->getServer()->getPluginManager()->registerEvents($this->listener ?? $this->listener = new MainListener($this), $this);
     }
 
     private function registerGames(){
         $allPrizes = $this->getConfig()->get('prizes');
 
         $name = $this->getMessage('game.randomInteger');
-        $example = $this->getMessage('game.randomInteger.example');
         $options = $this->getConfig()->get('randomInteger');
         $prizes = $allPrizes['randomIntegerItems'];
 
-        $this->registerGame(RandomIntegerGame::class, $name, $example, $options, $prizes, 'guessthenumber.play.randomint', 'guessthenumber.cmd.randomint');
+        $this->registerGame(RandomIntegerGame::class, $name, $options, $prizes, 'guessthenumber.play.randomint', 'guessthenumber.cmd.randomint');
 
         $name = $this->getMessage('game.exponent');
-        $example = $this->getMessage('game.exponent.example');
         $options = $this->getConfig()->get('exponent');
         $prizes = $allPrizes['exponentItems'];
 
-        $this->registerGame(ExponentGame::class, $name, $example, $options, $prizes, 'guessthenumber.play.exponent', 'guessthenumber.cmd.exponent');
+        $this->registerGame(ExponentGame::class, $name, $options, $prizes, 'guessthenumber.play.exponent', 'guessthenumber.cmd.exponent');
 
         $name = $this->getMessage('game.addition');
-        $example = $this->getMessage('game.addition.example');
         $options = $this->getConfig()->get('addition');
         $prizes = $allPrizes['additionItems'];
 
-        $this->registerGame(AdditionGame::class, $name, $example, $options, $prizes, 'guessthenumber.play.addition', 'guessthenumber.cmd.addition');
+        $this->registerGame(AdditionGame::class, $name, $options, $prizes, 'guessthenumber.play.addition', 'guessthenumber.cmd.addition');
 
         $name = $this->getMessage('game.subtraction');
-        $example = $this->getMessage('game.subtraction.example');
         $options = $this->getConfig()->get('subtraction');
         $prizes = $allPrizes['subtractionItems'];
 
-        $this->registerGame(SubtractionGame::class, $name, $example, $options, $prizes, 'guessthenumber.play.subtraction', 'guessthenumber.cmd.subtraction');
+        $this->registerGame(SubtractionGame::class, $name, $options, $prizes, 'guessthenumber.play.subtraction', 'guessthenumber.cmd.subtraction');
 
         $name = $this->getMessage('game.multiplication');
-        $example = $this->getMessage('game.multiplication.example');
         $options = $this->getConfig()->get('multiplication');
         $prizes = $allPrizes['multiplicationItems'];
 
-        $this->registerGame(MultiplicationGame::class, $name, $example, $options, $prizes, 'guessthenumber.play.multiplication', 'guessthenumber.cmd.multiplcation');
+        $this->registerGame(MultiplicationGame::class, $name, $options, $prizes, 'guessthenumber.play.multiplication', 'guessthenumber.cmd.multiplcation');
 
         $name = $this->getMessage('game.division');
-        $example = $this->getMessage('game.division.example');
         $options = $this->getConfig()->get('division');
         $prizes = $allPrizes['divisionItems'];
         
-        $this->registerGame(DivisionGame::class, $name, $example, $options, $prizes, 'guessthenumber.play.division', 'guessthenumber.cmd.division');
+        $this->registerGame(DivisionGame::class, $name, $options, $prizes, 'guessthenumber.play.division', 'guessthenumber.cmd.division');
 
         $name = $this->getMessage('game.factorial');
-        $example = $this->getMessage('game.factorial.example');
         $options = $this->getConfig()->get('factorial');
         $prizes = $allPrizes['factorialItems'];
 
-        $this->registerGame(FactorialGame::class, $name, $example, $options, $prizes, 'guessthenumber.play.factorial', 'guessthenumber.cmd.factorial');
+        $this->registerGame(FactorialGame::class, $name, $options, $prizes, 'guessthenumber.play.factorial', 'guessthenumber.cmd.factorial');
     }
 
-    public function registerGame(string $class, string $name, string $example, array $options, array $prizes = [], string $playPermission = 'guessthenumber.play', string $startPermission = 'guessthenumber.cmd'): bool{
-        $game = new $class($name, $example, $options, $prizes, $playPermission, $startPermission);
+    public function registerGame(string $class, string $name, array $options, array $prizes = [], string $playPermission = 'guessthenumber.play', string $startPermission = 'guessthenumber.cmd'): bool{
+        $game = new $class($name, $options, $prizes, $playPermission, $startPermission);
 
         $this->getServer()->getPluginManager()->callEvent($event = new NumberGameRegisterEvent($this, $game));
 
@@ -144,7 +137,7 @@ class Main extends PluginBase {
             $this->getServer()->getScheduler()->cancelTasks($this);
             $this->answeringPlayers = [];
 
-            $this->getServer()->broadcastMessage(TF::GOLD.$this->getMessage('general.stop'));
+            $this->getServer()->broadcastMessage(TF::GOLD.$this->getMessage('general.game.stop'));
 
             $this->getCurrentGame()->resetGame();
             $this->currentGame = null;
@@ -188,10 +181,6 @@ class Main extends PluginBase {
     }
 
     public function getMessage(string $index, ...$args): string{
-        if(empty($args)){
-            return $this->baseLang->get($index);
-        }
-
         return $this->baseLang->translateString($index, $args);
     }
 

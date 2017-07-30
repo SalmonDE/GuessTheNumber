@@ -1,6 +1,10 @@
 <?php
 namespace SalmonDE\GuessTheNumber\Events;
 
+use pocketmine\Player;
+use SalmonDE\GuessTheNumber\Games\NumberGame;
+use SalmonDE\GuessTheNumber\Main;
+
 class PlayerFailEvent extends GuessTheNumberEvent {
 
     private $player;

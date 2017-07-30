@@ -5,8 +5,8 @@ namespace SalmonDE\GuessTheNumber\Games;
 
 class FactorialGame extends NumberGame {
 
-    public function __construct(string $name, string $example, array $options, array $prizes, string $playPermission, string $startPermission){
-        parent::__construct($name, $example, $prizes, $playPermission, $startPermission);
+    public function __construct(string $name, array $options, array $prizes, string $playPermission, string $startPermission){
+        parent::__construct($name, $prizes, $playPermission, $startPermission);
 
         $this->firstIntMin = $options['min'] > 0 ? $options['min'] : 0;
         $this->firstIntMax = $options['max'];
@@ -24,6 +24,24 @@ class FactorialGame extends NumberGame {
         $this->calculation = null;
 
         $this->solution = null;
+    }
+
+    public function getExample(): string{
+        $firstInt = $this->firstInt;
+
+        while($firstInt == $this->firstInt){
+            $firstInt = random_int(10, 12);
+        }
+
+        return $firstInt.'! : '.$this->dissolveFact($firstInt).' = '.gmp_fact($firstInt);
+    }
+
+    private function dissolveFact(int $int): string{
+        if($int < 1){
+            return '';
+        }
+
+        return $int.' * '.$this->dissolveFact($int - 1);
     }
 
 }

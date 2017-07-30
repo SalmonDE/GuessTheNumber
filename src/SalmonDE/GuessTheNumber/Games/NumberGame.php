@@ -17,7 +17,6 @@ abstract class NumberGame {
     private $name;
     protected $playPermission;
     protected $startPermission;
-    protected $example;
     protected $solution = null;
     protected $calculation = null;
     protected $firstInt = null;
@@ -28,14 +27,13 @@ abstract class NumberGame {
     protected $secondIntMax = null;
     protected $itemPrizes = [];
 
-    public function __construct(string $name, string $example, array $prizes, string $playPermission, string $startPermission){
+    public function __construct(string $name, array $prizes, string $playPermission, string $startPermission){
         $this->name = $name;
         $this->playPermission = $playPermission;
         $this->startPermission = $startPermission;
-        $this->example = $example;
 
         foreach($prizes as $itemString){
-            $this->itemPrizes[] = new Item(...explode(':', $itemString));
+            $this->itemPrizes[] = Item::get(...explode(':', $itemString));
         }
     }
 
@@ -43,11 +41,13 @@ abstract class NumberGame {
 
     abstract public function resetGame();
 
+    abstract public function getExample(): string;
+
     public function announceGame(Main $plugin, array $recipients = null){
-        $msg = TF::GREEN.TF::BOLD.$this->getMessage('game.startHeader', $this->getName()).TF::RESET."\n";
-        $msg .= $plugin->getMessage('game.equation', $this->getCalculation()).TF::RESET."\n";
-        $msg .= $plugin->getMessage('game.example', $this->getExample()).TF::RESET."\n";
-        $msg .= $plugin->getMessage('game.howTo').TF::RESET;
+        $msg = TF::GREEN.TF::BOLD.$plugin->getMessage('general.game.startHeader', TF::GOLD.$this->getName().TF::GREEN).TF::RESET."\n";
+        $msg .= TF::GOLD.$plugin->getMessage('general.game.calculation', TF::AQUA.$this->getCalculation().TF::GOLD).TF::RESET."\n";
+        $msg .= TF::GOLD.$plugin->getMessage('general.game.example', TF::AQUA.$this->getExample().TF::GOLD).TF::RESET."\n";
+        $msg .= TF::GOLD.$plugin->getMessage('general.game.howTo').TF::RESET;
 
         $sound = new ClickSound(new Vector3());
 
@@ -57,7 +57,7 @@ abstract class NumberGame {
             $sound->z = $player->z;
 
             $player->getLevel()->addSound($sound, [$player]);
-            $player->addTitle('', $this->getName());
+            $player->addTitle('', TF::GOLD.$this->getName(), 10, 40, 20);
             $player->sendMessage($msg);
         }
     }
@@ -102,10 +102,6 @@ abstract class NumberGame {
         return $this->itemPrizes;
     }
 
-    public function getExample(): string{
-        return $this->example;
-    }
-
     public function getCalculation(): string{
         return $this->calculation;
     }
@@ -123,30 +119,34 @@ abstract class NumberGame {
             $plugin->getServer()->getPluginManager()->callEvent($event = new PlayerWinEvent($plugin, $this, $player, $answer));
 
             if(!$event->isCancelled()){
-                $msg = TF::GREEN.$plugin->getMessage('answer.right', $player->getDisplayName(), $answer);
-
-                $sound = new FizzSound(new Vector3());
-
-                foreach($plugin->getServer()->getOnlinePlayers() as $p){
-                    $sound->x = $p->x;
-                    $sound->y = $p->y;
-                    $sound->z = $p->z;
-
-                    $p->sendMessage($msg);
-                    $p->getLevel()->addSound($sound, [$p]);
-                }
-
+                $this->broadcastWinner($player, $answer, $plugin);
                 $this->givePrizes($player, $plugin);
+                $plugin->stopGame();
                 return true;
             }
         }
 
-        $plugin->getServer()->getPluginManager()->callEvent(new PlayerFailEvent());
+        $plugin->getServer()->getPluginManager()->callEvent(new PlayerFailEvent($plugin, $this, $player, $answer));
 
         $player->sendMessage(TF::RED.$plugin->getMessage('answer.wrong'));
         $player->getLevel()->addSound(new AnvilFallSound($player), [$player]);
 
         return false;
+    }
+
+    protected function broadcastWinner(Player $player, string $answer, Main $plugin){
+        $msg = TF::GREEN.$plugin->getMessage('answer.right', $player->getDisplayName(), $answer);
+
+        $sound = new FizzSound(new Vector3());
+
+        foreach($plugin->getServer()->getOnlinePlayers() as $p){
+            $sound->x = $p->x;
+            $sound->y = $p->y;
+            $sound->z = $p->z;
+
+            $p->sendMessage($msg);
+            $p->getLevel()->addSound($sound, [$p]);
+        }
     }
 
     public function isSolution(string $answer): bool{

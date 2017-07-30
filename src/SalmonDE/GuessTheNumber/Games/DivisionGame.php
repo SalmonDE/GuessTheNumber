@@ -5,8 +5,8 @@ namespace SalmonDE\GuessTheNumber\Games;
 
 class DivisionGame extends NumberGame {
 
-    public function __construct(string $name, string $example, array $options, array $prizes, string $playPermission, string $startPermission){
-        parent::__construct($name, $example, $prizes, $playPermission, $startPermission);
+    public function __construct(string $name, array $options, array $prizes, string $playPermission, string $startPermission){
+        parent::__construct($name, $prizes, $playPermission, $startPermission);
 
         $this->firstIntMin = (int) $options['dividendMin'];
         $this->firstIntMax = (int) $options['dividendMax'];
@@ -29,6 +29,21 @@ class DivisionGame extends NumberGame {
 
         $this->calculation = null;
         $this->solution = null;
+    }
+
+    public function getExample(): string{
+        $firstInt = $this->firstInt;
+        $secondInt = $this->secondInt;
+
+        while($firstInt == $this->firstInt){
+            $firstInt = random_int($this->firstIntMin, $this->firstIntMax);
+        }
+
+        while($secondInt == $this->secondInt){
+            $secondInt = random_int($this->secondIntMin, $this->secondIntMax);
+        }
+
+        return $firstInt.' / '.$secondInt.' = '.$firstInt / $secondInt;
     }
 
 }

@@ -57,18 +57,18 @@ class MainListener implements Listener {
                 if($this->isAnswering($event->getPlayer()->getName())){
                     $event->getPlayer()->sendMessage(TF::RED.$this->owner->getMessage('general.alreadyChecking'));
                 }else{
-                    $this->getServer()->getPluginManager()->callEvent($event = new PlayerAnswerEvent($this, $this->owner->getCurrentGame(), $event->getPlayer(), $event->getMessage()));
+                    $this->owner->getServer()->getPluginManager()->callEvent($answerEvent = new PlayerAnswerEvent($this->owner, $this->owner->getCurrentGame(), $event->getPlayer(), $event->getMessage()));
 
-                    if(!$event->isCancelled()){
+                    if(!$answerEvent->isCancelled()){
                         $this->owner->getServer()->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this->owner, $event->getPlayer(), $event->getMessage()), $this->owner->getTimer());
                         $this->setAnswering($event->getPlayer()->getName());
 
-                        $event->getPlayer()->sendMessage('general.checking', $this->timer / 20);
+                        $event->getPlayer()->sendMessage(TF::GOLD.$this->owner->getMessage('general.checking', (TF::AQUA.$this->owner->getTimer() / 20).TF::GOLD).TF::RESET);
                     }
                 }
 
-                if($event ?? false){
-                    $event->setCancelled(!$event->showChatMessage());
+                if($answerEvent ?? false){
+                    $event->setCancelled(!$answerEvent->showChatMessage());
                 }else{
                     $event->setCancelled();
                 }

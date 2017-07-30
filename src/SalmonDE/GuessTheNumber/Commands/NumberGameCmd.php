@@ -10,7 +10,6 @@ use pocketmine\command\PluginCommand;
 use pocketmine\event\TranslationContainer;
 use pocketmine\utils\TextFormat as TF;
 use SalmonDE\GuessTheNumber\Main;
-use SalmonDE\GuessTheNumber\Games\NumberGame;
 
 class NumberGameCmd extends PluginCommand implements CommandExecutor {
 
@@ -35,9 +34,9 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
                 if($sender->hasPermission('guessthenumber.cmd.solution')){
                     if($this->getPlugin()->isGameRunning()){
                         $solution = $this->getPlugin()->getCurrentGame()->getSolution();
-                        $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('cmd.solution', $solution));
+                        $sender->sendMessage(TF::AQUA.$this->getPlugin()->getMessage('general.game.solutionOnly', $solution));
                     }else{
-                        $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('general.noGameRunning'));
+                        $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('general.game.notRunning'));
                     }
                 }else{
                     $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
@@ -49,7 +48,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
                     if($this->getPlugin()->isGameRunning()){
                         $this->getPlugin()->stopGame();
                     }else{
-                        $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('general.noGameRunning'));
+                        $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('general.game.notRunning'));
                     }
                 }else{
                     $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
@@ -80,7 +79,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
 
             $this->getPlugin()->startGame($game);
         }else{
-            $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('general.gameAlreadyRunning'));
+            $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('general.game.alreadyRunning', $this->getPlugin()->getCurrentGame()->getName()).TF::RESET);
         }
     }
 
