@@ -42,6 +42,10 @@ class MainListener implements Listener {
      * @priority MONITOR
      */
     public function onChat(PlayerChatEvent $event){
+        if($event->isCancelled()){
+            return;
+        }
+
         if($this->owner->isGameRunning()){
             if($this->owner->getCurrentGame()->isValidAnswer($event->getMessage(), $this->owner->getDecimalMark(), $this->owner->getThousandSeparator())){
 
@@ -72,9 +76,14 @@ class MainListener implements Listener {
         }
     }
 
+    /**
+     * @priority MONITOR
+     */
     public function onJoin(PlayerJoinEvent $event){
-        if($this->owner->isGameRunning()){
-            $this->owner->getCurrentGame()->announceGame($this->owner, [$event->getPlayer()]);
+        if(!$event->isCancelled()){
+            if($this->owner->isGameRunning()){
+                $this->owner->getCurrentGame()->announceGame($this->owner, [$event->getPlayer()]);
+            }
         }
     }
 
