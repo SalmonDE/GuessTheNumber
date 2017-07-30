@@ -41,9 +41,9 @@ class Main extends PluginBase {
         $this->decimalMark = $this->baseLang->get('chat.decimalMark');
         $this->thousandSeparator = $this->baseLang->get('chat.thousandSeparator');
 
-        $this->registerGames();
-
         $this->getServer()->getCommandMap()->register('guessthenumber', new NumberGameCmd($this), 'numbergame');
+
+        $this->registerGames();
 
         $this->getServer()->getPluginManager()->registerEvents($this->listener ?? new MainListener($this), $this);
     }

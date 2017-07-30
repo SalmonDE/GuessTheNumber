@@ -5,8 +5,8 @@ namespace SalmonDE\GuessTheNumber\Games;
 
 class FactorialGame extends NumberGame {
 
-    public function __construct(string $name, string $example, array $options, array $prizes, string $permission){
-        parent::__construct($name, $example, $prizes, $permission);
+    public function __construct(string $name, string $example, array $options, array $prizes, string $playPermission, string $startPermission){
+        parent::__construct($name, $example, $prizes, $playPermission, $startPermission);
 
         $this->firstIntMin = $options['min'] > 0 ? $options['min'] : 0;
         $this->firstIntMax = $options['max'];

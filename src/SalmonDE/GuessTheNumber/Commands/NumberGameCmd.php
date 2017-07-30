@@ -84,7 +84,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
         }
     }
 
-    protected function updateAvailableGames(){
+    public function updateAvailableGames(){
         $gameNames = '';
 
         foreach($this->getPlugin()->getGames() as $game){
