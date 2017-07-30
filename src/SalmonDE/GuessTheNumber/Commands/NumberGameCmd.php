@@ -10,7 +10,7 @@ use pocketmine\command\PluginCommand;
 use pocketmine\event\TranslationContainer;
 use pocketmine\utils\TextFormat as TF;
 use SalmonDE\GuessTheNumber\Main;
-use SalmonDE\GuessTheNumber\NumberGame;
+use SalmonDE\GuessTheNumber\Games\NumberGame;
 
 class NumberGameCmd extends PluginCommand implements CommandExecutor {
 
@@ -18,68 +18,19 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
         parent::__construct('numbergame', $owner);
         $this->setExecutor($this);
         $this->setPermission('guessthenumber.cmd');
-        $this->setUsage('/numbergame <rand|exp|add|sub|multi|div|fact|solution|abort>');
+
+        $gameNames = '';
+
+        foreach($owner->getGames() as $game){
+            $gameNames .= str_replace(' ', '', strtolower($game->getName())).'|';
+        }
+
+        $this->setUsage('/numbergame <'.$gameNames.'solution|abort>');
         $this->setDescription('Main command of GuessTheNumber');
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool{
-        switch(strtolower($args[0] ?? '')){
-            case 'rand':
-                if($sender->hasPermission('guessthenumber.cmd.randomint')){
-                    $this->startGame(NumberGame::RANDOM_INT_GAME, $sender);
-                }else{
-                    $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
-                }
-                break;
-
-            case 'exp':
-                if($sender->hasPermission('guessthenumber.cmd.exponent')){
-                    $this->startGame(NumberGame::EXPONENT_GAME, $sender);
-                }else{
-                    $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
-                }
-                break;
-
-            case 'add':
-                if($sender->hasPermission('guessthenumber.cmd.addition')){
-                    $this->startGame(NumberGame::ADDITION_GAME, $sender);
-                }else{
-                    $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
-                }
-                break;
-
-            case 'sub':
-                if($sender->hasPermission('guessthenumber.cmd.subtraction')){
-                    $this->startGame(NumberGame::SUBTRACTION_GAME, $sender);
-                }else{
-                    $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
-                }
-                break;
-
-            case 'multi':
-                if($sender->hasPermission('guessthenumber.cmd.multiplication')){
-                    $this->startGame(NumberGame::MULTIPLICATION_GAME, $sender);
-                }else{
-                    $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
-                }
-                break;
-
-            case 'div':
-                if($sender->hasPermission('guessthenumber.cmd.division')){
-                    $this->startGame(NumberGame::DIVISION_GAME, $sender);
-                }else{
-                    $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
-                }
-                break;
-
-            case 'fact':
-                if($sender->hasPermission('guessthenumber.cmd.factorial')){
-                    $this->startGame(NumberGame::FACTORIAL_GAME, $sender);
-                }else{
-                    $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
-                }
-                break;
-
+        switch($args[0] = str_replace(' ', '', strtolower($args[0] ?? ''))){
             case 'solution':
                 if($sender->hasPermission('guessthenumber.cmd.solution')){
                     if($this->getPlugin()->isGameRunning()){
@@ -106,20 +57,41 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
                 break;
 
             default:
-                return false;
+
+                if($this->getPlugin()->gameExists($args[0])){
+                    $game = $this->getPlugin()->getGameByName($args[0]);
+
+                    if($sender->hasPermission($game->getStartPermission())){
+                        $this->startGame($args[0], $sender);
+                    }else{
+                        $sender->sendMessage(new TranslationContainer(TF::RED."%commands.generic.permission"));
+                    }
+                }else{
+                    return false;
+                }
         }
 
         return true;
     }
 
-    protected function startGame(int $gameType, CommandSender $sender){
+    protected function startGame(string $gameName, CommandSender $sender){
         if(!$this->getPlugin()->isGameRunning()){
-            $game = $this->getPlugin()->createGame($gameType);
+            $game = $this->getPlugin()->getGameByName($gameName);
 
             $this->getPlugin()->startGame($game);
         }else{
             $sender->sendMessage(TF::RED.$this->getPlugin()->getMessage('general.gameAlreadyRunning'));
         }
+    }
+
+    protected function updateAvailableGames(){
+        $gameNames = '';
+
+        foreach($this->getPlugin()->getGames() as $game){
+            $gameNames .= str_replace(' ', '', strtolower($game->getName())).'|';
+        }
+
+        $this->setUsage('/numbergame <'.$gameNames.'solution|abort>');
     }
 
 }

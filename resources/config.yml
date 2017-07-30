@@ -68,8 +68,8 @@ multiplication:
 
 # dividend / divisor
 division:
-    dividendIntMin: 1
-    dividendIntMax: 1000
+    dividendMin: 1
+    dividendMax: 1000
     divisorMin: 1
     divisorMax: 10
 
