@@ -123,7 +123,7 @@ abstract class NumberGame {
             $plugin->getServer()->getPluginManager()->callEvent($event = new PlayerWinEvent($plugin, $this, $player, $answer));
 
             if(!$event->isCancelled()){
-                $msg = TF::GREEN.$plugin->getMessage('answer.right', $answer);
+                $msg = TF::GREEN.$plugin->getMessage('answer.right', $player->getDisplayName(), $answer);
 
                 $sound = new FizzSound(new Vector3());
 
@@ -133,7 +133,7 @@ abstract class NumberGame {
                     $sound->z = $p->z;
 
                     $p->sendMessage($msg);
-                    $p->getLevel()->addSound(new FizzSound($p), [$p]);
+                    $p->getLevel()->addSound($sound, [$p]);
                 }
 
                 $this->givePrizes($player, $plugin);
