@@ -14,7 +14,7 @@ use SalmonDE\GuessTheNumber\Main;
 
 abstract class NumberGame {
 
-    private $name;
+    private $gameName;
     protected $playPermission;
     protected $startPermission;
     protected $solution = null;
@@ -28,7 +28,7 @@ abstract class NumberGame {
     protected $itemPrizes = [];
 
     public function __construct(string $name, array $prizes, string $playPermission, string $startPermission){
-        $this->name = $name;
+        $this->gameName = $name;
         $this->playPermission = $playPermission;
         $this->startPermission = $startPermission;
 
@@ -43,11 +43,17 @@ abstract class NumberGame {
 
     abstract public function getExample(): string;
 
-    public function announceGame(Main $plugin, array $recipients = null){
+    public function getAnnounceMessage(Main $plugin): string{
         $msg = TF::GREEN.TF::BOLD.$plugin->getMessage('general.game.startHeader', TF::GOLD.$this->getName().TF::GREEN).TF::RESET."\n";
         $msg .= TF::GOLD.$plugin->getMessage('general.game.calculation', TF::AQUA.$this->getCalculation().TF::GOLD).TF::RESET."\n";
-        $msg .= TF::GOLD.$plugin->getMessage('general.game.example', TF::AQUA.$this->getExample().TF::GOLD).TF::RESET."\n";
+        $msg .= TF::GOLD.$plugin->getMessage('general.game.example', TF::DARK_GRAY.$this->getExample().TF::GOLD).TF::RESET."\n";
         $msg .= TF::GOLD.$plugin->getMessage('general.game.howTo').TF::RESET;
+
+        return $msg;
+    }
+
+    public function announceGame(Main $plugin, array $recipients = null){
+        $msg = $this->getAnnounceMessage($plugin);
 
         $sound = new ClickSound(new Vector3());
 
@@ -63,7 +69,7 @@ abstract class NumberGame {
     }
 
     final public function getName(): string{
-        return $this->name;
+        return $this->gameName;
     }
 
     final public function getPlayPermission(): string{
@@ -161,7 +167,7 @@ abstract class NumberGame {
         $prizeListMessage = TF::GREEN.TF::BOLD.$plugin->getMessage('prizeList.header').TF::RESET;
 
         foreach($this->itemPrizes as $itemPrize){
-            $prizeListMessage .= "\n".TF::AQUA.$plugin->getMessage('prizeList.item', $itemPrize->getName(), $itemPrize->getCount()).TF::RESET;
+            $prizeListMessage .= "\n".TF::AQUA.$plugin->getMessage('prizeList.item', TF::GREEN.$itemPrize->getName().TF::AQUA, TF::LIGHT_PURPLE.$itemPrize->getCount().TF::AQUA).TF::RESET;
 
             $player->getInventory()->addItem(clone $itemPrize);
         }

@@ -8,6 +8,8 @@ use SalmonDE\GuessTheNumber\Main;
 
 class PlayerWinEvent extends GuessTheNumberEvent implements Cancellable {
 
+    static public $handlerList = null;
+
     private $player;
     private $answer;
 
@@ -19,6 +21,10 @@ class PlayerWinEvent extends GuessTheNumberEvent implements Cancellable {
 
     public function getPlayer(): Player{
         return $this->player;
+    }
+
+    public function getAnswer(): string{
+        return $this->answer;
     }
 
 }

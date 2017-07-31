@@ -10,7 +10,7 @@
 language: eng
 
 # Time in seconds which a player needs to wait until the plugins checks the answer
-timer: 3.0
+timer: 3
 
 # Example: ['265:0:10', '266:0:2'] // ID:Damage:Amount
 prizes:
@@ -64,7 +64,7 @@ subtraction:
 
 multiplication:
     min: 0
-    max: 10
+    max: 100
 
 # dividend / divisor
 division:

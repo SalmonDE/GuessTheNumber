@@ -7,8 +7,6 @@ use SalmonDE\GuessTheNumber\Main;
 
 class GuessTheNumberEvent extends PluginEvent {
 
-    static public $handlerList = null;
-
     private $game;
 
     public function __construct(Main $plugin, NumberGame $game){

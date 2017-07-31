@@ -1,11 +1,15 @@
 <?php
+declare(strict_types = 1);
+
 namespace SalmonDE\GuessTheNumber;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\utils\TextFormat as TF;
+use SalmonDE\GuessTheNumber\Events\NumberGameStartEvent;
 use SalmonDE\GuessTheNumber\Events\PlayerAnswerEvent;
+use SalmonDE\GuessTheNumber\Events\PlayerWinEvent;
 use SalmonDE\GuessTheNumber\Main;
 use SalmonDE\GuessTheNumber\Tasks\AnswerCheckTask;
 
@@ -63,7 +67,7 @@ class MainListener implements Listener {
                         $this->owner->getServer()->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this->owner, $event->getPlayer(), $event->getMessage()), $this->owner->getTimer());
                         $this->setAnswering($event->getPlayer()->getName());
 
-                        $event->getPlayer()->sendMessage(TF::GOLD.$this->owner->getMessage('general.checking', (TF::AQUA.$this->owner->getTimer() / 20).TF::GOLD).TF::RESET);
+                        $event->getPlayer()->sendMessage(TF::GOLD.$this->owner->getMessage('general.checking', TF::AQUA.($this->owner->getTimer() / 20).TF::GOLD).TF::RESET);
                     }
                 }
 
@@ -82,6 +86,25 @@ class MainListener implements Listener {
     public function onJoin(PlayerJoinEvent $event){
         if($this->owner->isGameRunning()){
             $this->owner->getCurrentGame()->announceGame($this->owner, [$event->getPlayer()]);
+        }
+    }
+
+    /**
+     * @priority MONITOR
+     */
+    public function onGameStart(NumberGameStartEvent $event){
+        if(!$event->isCancelled()){
+            $this->owner->getLogger()->notice($event->getGame()->getAnnounceMessage($this->owner));
+        }
+    }
+
+    /**
+     * @priority MONITOR
+     */
+    public function onPlayerWin(PlayerWinEvent $event){
+        if(!$event->isCancelled()){
+            $msg = TF::GREEN.$this->owner->getMessage('answer.right', $event->getPlayer()->getDisplayName(), $event->getAnswer());
+            $this->owner->getLogger()->notice($msg);
         }
     }
 

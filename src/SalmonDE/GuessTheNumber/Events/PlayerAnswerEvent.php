@@ -8,6 +8,8 @@ use SalmonDE\GuessTheNumber\Main;
 
 class PlayerAnswerEvent extends GuessTheNumberEvent implements Cancellable {
 
+    static public $handlerList = null;
+
     private $player;
     private $answer;
     private $showInChat = false;

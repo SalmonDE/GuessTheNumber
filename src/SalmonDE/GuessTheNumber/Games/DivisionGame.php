@@ -20,7 +20,7 @@ class DivisionGame extends NumberGame {
         $this->secondInt = random_int($this->secondIntMin, $this->secondIntMax);
 
         $this->calculation = $this->firstInt.' / '.$this->secondInt;
-        $this->solution = $this->firstInt / $this->secondInt;
+        $this->solution = round($this->firstInt / $this->secondInt, 2);
     }
 
     public function resetGame(){

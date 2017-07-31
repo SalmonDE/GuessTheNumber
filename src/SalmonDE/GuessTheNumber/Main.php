@@ -35,7 +35,7 @@ class Main extends PluginBase {
         $this->saveResource('eng.ini'); // fallback
         $this->saveResource($this->getConfig()->get('language').'.ini');
 
-        $this->timer = (float) $this->getConfig()->get('timer') * 20;
+        $this->timer = (int) $this->getConfig()->get('timer') * 20;
         $this->baseLang = new BaseLang($this->getConfig()->get('language'), $this->getDataFolder(), 'eng');
 
         $this->decimalMark = $this->baseLang->get('chat.decimalMark');
@@ -172,7 +172,7 @@ class Main extends PluginBase {
         return $this->currentGame instanceof NumberGame;
     }
 
-    public function getTimer(): float{
+    public function getTimer(): int{
         return $this->timer;
     }
 
