@@ -19,16 +19,16 @@ Pattern Search | -                                                    | -
 
 ### Commands
 
-Command                   | Permission Node                   | Information
-------------------------- | --------------------------------- | ------------------------------------------------
-/numbergame               | guessthenumber.cmd                | Main command of GuessTheNumber.
-/guessgame randominteger  | guessthenumber.cmd.randomint      | Starts a random integer game
-/guessgame exponent       | guessthenumber.cmd.exponent       | Starts an exponent game
-/guessgame addition       | guessthenumber.cmd.addition       | Starts an addition game
-/guessgame subtraction    | guessthenumber.cmd.subtraction    | Starts a subtraction game
-/guessgame multiplication | guessthenumber.cmd.multiplication | Starts a multiplication game
-/guessgame division       | guessthenumber.cmd.division       | Starts a division game
-/guessgame factorial      | guessthenumber.cmd.factorial      | Starts a factorial game
-/guessgame patternsearch  | guessthenumber.cmd.patternsearch  | Starts a pattern search game
-/guessgame solution       | guessthenumber.cmd.solution       | Gives the user the solution to the current task.
-/guessgame abort          | guessthenumber.cmd.abort          | Aborts an active game.
+Command                    | Permission Node                   | Information
+-------------------------- | --------------------------------- | ------------------------------------------------
+/numbergame                | guessthenumber.cmd                | Main command of GuessTheNumber.
+/numbergame randominteger  | guessthenumber.cmd.randomint      | Starts a random integer game
+/numbergame exponent       | guessthenumber.cmd.exponent       | Starts an exponent game
+/numbergame addition       | guessthenumber.cmd.addition       | Starts an addition game
+/numbergame subtraction    | guessthenumber.cmd.subtraction    | Starts a subtraction game
+/numbergame multiplication | guessthenumber.cmd.multiplication | Starts a multiplication game
+/numbergame division       | guessthenumber.cmd.division       | Starts a division game
+/numbergame factorial      | guessthenumber.cmd.factorial      | Starts a factorial game
+/numbergame patternsearch  | guessthenumber.cmd.patternsearch  | Starts a pattern search game
+/numbergame solution       | guessthenumber.cmd.solution       | Gives the user the solution to the current task.
+/numbergame abort          | guessthenumber.cmd.abort          | Aborts an active game.
