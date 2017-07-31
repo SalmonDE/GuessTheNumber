@@ -1,29 +1,50 @@
 name: GuessTheNumber
-version: 2.2.0
-api: [2.0.0, 3.0.0-ALPHA1, 3.0.0-ALPHA2, 3.0.0-ALPHA3, 3.0.0-ALPHA4, 3.0.0-ALPHA5, 3.0.0-ALPHA6]
-main: SalmonDE\GuessTheNumber\Number
-description: Guessing Game for your Server!
+version: 3.0.1
+api: [3.0.0-ALPHA7]
 author: SalmonDE
-website: https://salmonde.de/
-commands:
- guessgame:
-  description: Main command of GuessTheNumber
-  usage: /guessgame <normal|square|plus|minus|abort|solution>
-  permission: guessthenumber.cmd
+main: SalmonDE\GuessTheNumber\Main
+extensions:
+- yaml
+- gmp
+description: Chat games about simple maths and guessing
 permissions:
- guessthenumber:
-  description: Main Permission Node
-  children:
-   guessthenumber.cmd:
-   guessthenumber.normal:
-    description: Permission for "/guessgame normal"
-   guessthenumber.square:
-    description: Permission for "/guessgame square"
-   guessthenumber.plus:
-     description: Permission for "/guessgame plus"
-   guessthenumber.minus:
-     description: Permission for "/guessgame minus"
-   guessthenumber.solution:
-    description: Permission for "/guessgame solution"
-   guessthenumber.abort:
-    description: Permission for "/guessgame abort"
+    guessthenumber:
+        description: Main permission node
+        children:
+            guessthenumber.play:
+                default: true
+                children:
+                    guessthenumber.play.randomint:
+                        description: Permission to take part in a random integer game
+                    guessthenumber.play.exponent:
+                        description: Permission to take part in an exponent game
+                    guessthenumber.play.addition:
+                        description: Permission to take part in an addition game
+                    guessthenumber.play.subtraction:
+                        description: Permission to take part in a subtraction game
+                    guessthenumber.play.multiplication:
+                        description: Permission to take part in a multiplication game
+                    guessthenumber.play.division:
+                        description: Permission to take part in a division game
+                    guessthenumber.play.factorial:
+                        description: Permission to take part in a factorial game
+            guessthenumber.cmd:
+                children:
+                    guessthenumber.cmd.randomint:
+                        description: Permission to start a random integer game
+                    guessthenumber.cmd.exponent:
+                        description: Permission to start an exponent game
+                    guessthenumber.cmd.addition:
+                        description: Permission to start an addition game
+                    guessthenumber.cmd.subtraction:
+                        description: Permission to start a subtraction game
+                    guessthenumber.cmd.multiplication:
+                        description: Permission to start a multiplication game
+                    guessthenumber.cmd.division:
+                        description: Permission to start a division game
+                    guessthenumber.cmd.factorial:
+                        description: Permission to start a factorial game
+                    guessthenumber.cmd.solution:
+                        description: Permission to get the solution of the current game
+                    guessthenumber.cmd.abort:
+                        description: Permission to abort the current game

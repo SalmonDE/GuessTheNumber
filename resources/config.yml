@@ -1,26 +1,80 @@
-# Configuration file of GuessTheNumber!
+# Configuration file of GuessTheNumber
+
+# When talking about "random integer" in this plugin, actually a "pseudorandom integer" is meant.
+# https://en.wikipedia.org/wiki/Pseudorandom_number_generator
 
 # Languages available:
 # deu (Deutsch)
 # eng (English)
-Language: eng
+# I am happy for contributions on GitHub! :)
+language: eng
 
-# Min/Max Numbers for a normal guessing game
-Min: 1
-Max: 100
+# Time in seconds which a player needs to wait until the plugins checks the answer
+timer: 3
 
-# Prize which the winner gets for a '/guessgame normal' quiz (normal)
-# Example: 265:0:10 // ID:Damage:Amount
-Item: '265:0:10'
+# Example: ['265:0:10', '266:0:2'] // ID:Damage:Amount
+prizes:
+    # Prizes which the winner gets for a '/numbergame random' quiz (random integer)
+    randomIntegerItems: ['265:0:10']
 
-# Prize which the winner gets for a '/guessgame square' quiz (squares)
-SquareItem: '322:0:1'
+    # Prizes which the winner gets for a '/numbergame exponent' quiz (exponent)
+    exponentItems: ['322:0:1']
 
-# Prize which the winner gets for a '/guessgame plus' quiz (plus)
-PlusItem: '351:4:22'
+    # Prizes which the winner gets for a '/numbergame addition' quiz (addition)
+    additionItems: ['351:4:22']
 
-# Prize which the winner gets for a '/guessgame minus' quiz (minus)
-MinusItem: '264:0:1'
+    # Prizes which the winner gets for a '/numbergame subtraction' quiz (subtraction)
+    subtractionItems: ['264:0:1']
 
-# Time which a player needs to wait until the plugins checks the answer (In seconds)
-Timer: 3
+    # Prizes which the winner gets for a '/numbergame multiplication' quiz (multiplication)
+    multiplicationItems: ['264:0:1']
+
+    # Prizes which the winner gets for a '/numbergame division' quiz (division)
+    divisionItems: ['264:0:1']
+
+    # Prizes which the winner gets for a '/numbergame factorial' quiz (factorial)
+    factorialItems: ['264:0:1']
+
+# Settings for the indiviual games
+
+randomInteger:
+    min: 1
+    max: 100
+
+# (base)^exponent
+# Example:
+# base = 5
+# exponent = 2
+#
+# (5)^2 = 25
+exponent:
+    exponentMin: 0
+    exponentMax: 4
+    baseIntMin: 1
+    baseIntMax: 20
+
+addition:
+    min: 0
+    max: 2000
+
+subtraction:
+    min: 0
+    max: 2000
+    allowNegativeSolution: false
+
+multiplication:
+    min: 0
+    max: 100
+
+# dividend / divisor
+division:
+    dividendMin: 1
+    dividendMax: 1000
+    divisorMin: 1
+    divisorMax: 10
+
+# 5! = 5*4*3*2*1
+#    = 120
+factorial:
+    min: 0
+    max: 7
