@@ -36,12 +36,12 @@ class FactorialGame extends NumberGame {
         return $firstInt.'! : '.$this->dissolveFact($firstInt).' = '.gmp_fact($firstInt);
     }
 
-    private function dissolveFact(int $int): string{
+    static private function dissolveFact(int $int): string{
         if($int < 1){
             return '';
         }
 
-        return $int.($int === 1 ? '' : ' * ').$this->dissolveFact($int - 1);
+        return $int.($int === 1 ? '' : ' * ').self::dissolveFact($int - 1);
     }
 
 }
