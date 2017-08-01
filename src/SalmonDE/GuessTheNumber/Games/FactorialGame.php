@@ -41,7 +41,7 @@ class FactorialGame extends NumberGame {
             return '';
         }
 
-        return $int.' * '.$this->dissolveFact($int - 1);
+        return $int.($int === 1 ? '' : ' * ').$this->dissolveFact($int - 1);
     }
 
 }
