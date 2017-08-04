@@ -1,4 +1,4 @@
-# GuessTheNumber ![Logo](/logo.png) [![Poggit-CI](https://poggit.pmmp.io/ci.badge/SalmonDE/GuessTheNumber/GuessTheNumber)](https://poggit.pmmp.io/ci/SalmonDE/GuessTheNumber/GuessTheNumber)<br>
+# GuessTheNumber ![Icon](/icon.png) [![Poggit-CI](https://poggit.pmmp.io/ci.badge/SalmonDE/GuessTheNumber/GuessTheNumber)](https://poggit.pmmp.io/ci/SalmonDE/GuessTheNumber/GuessTheNumber)<br>
 
 A PocketMine-MP plugin which adds games about numbers to your server.
 
