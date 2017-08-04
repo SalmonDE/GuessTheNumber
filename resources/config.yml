@@ -33,7 +33,7 @@ prizes:
     divisionItems: ['264:0:1']
 
     # Prizes which the winner gets for a '/numbergame factorial' quiz (factorial)
-    factorialItems: ['264:0:1']
+    factorialItems: ['388:0:1']
 
 # Settings for the indiviual games
 
