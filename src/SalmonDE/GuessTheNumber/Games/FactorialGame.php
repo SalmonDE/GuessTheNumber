@@ -27,11 +27,9 @@ class FactorialGame extends NumberGame {
     }
 
     public function getExample(): string{
-        $firstInt = $this->firstInt;
-
-        while($firstInt == $this->firstInt){
+        do{
             $firstInt = random_int(10, 12);
-        }
+        }while($firstInt == $this->firstInt);
 
         return $firstInt.'! : '.$this->dissolveFact($firstInt).' = '.gmp_fact($firstInt);
     }

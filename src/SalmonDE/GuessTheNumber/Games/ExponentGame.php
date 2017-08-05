@@ -32,16 +32,13 @@ class ExponentGame extends NumberGame {
     }
 
     public function getExample(): string{
-        $firstInt = $this->firstInt;
-        $secondInt = $this->secondInt;
-
-        while($firstInt == $this->firstInt){
+        do{
             $firstInt = random_int($this->firstIntMin, $this->firstIntMax);
-        }
+        }while($firstInt == $this->firstInt);
 
-        while($secondInt == $this->secondInt){
+        do{
             $secondInt = random_int($this->secondIntMin, $this->secondIntMax);
-        }
+        }while($secondInt == $this->secondInt);
 
         return '('.$firstInt.')^'.$secondInt.' = '.($firstInt ** $secondInt);
     }
