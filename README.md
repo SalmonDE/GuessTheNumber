@@ -1,4 +1,4 @@
-# GuessTheNumber ![Icon](/icon.png) [![Poggit-CI](https://poggit.pmmp.io/ci.badge/SalmonDE/GuessTheNumber/GuessTheNumber)](https://poggit.pmmp.io/ci/SalmonDE/GuessTheNumber/GuessTheNumber)<br>
+# GuessTheNumber ![Icon](icon.png) [![Poggit-CI](https://poggit.pmmp.io/ci.badge/SalmonDE/GuessTheNumber/GuessTheNumber)](https://poggit.pmmp.io/ci/SalmonDE/GuessTheNumber/GuessTheNumber)<br>
 
 A PocketMine-MP plugin which adds games about numbers to your server.
 
@@ -14,7 +14,7 @@ Addition       | Add integer 2 to integer 1                           | 5 + 3 = 
 Subtraction    | Subtract integer 2 from integer 1                    | 9 - 1 = 8
 Multiplication | Multiply integer 1 times integer 2                   | 4 * 2 = 8
 Division       | Divide integer 1 by integer 2                        | 16 / 2 = 8
-Factorial      | Product of all positive integers below and integer 1 | 5! (or 5 _4_ 3 _2_ 1) = 120
+Factorial      | Product of all positive integers below and integer 1 | 5! (or 5 \* 4 \* 3 \* 2 \* 1) = 120
 Pattern Search | -                                                    | -
 
 ### Commands
