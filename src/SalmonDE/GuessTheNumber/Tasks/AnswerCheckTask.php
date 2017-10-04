@@ -18,7 +18,7 @@ class AnswerCheckTask extends PluginTask {
         $this->answer = $answer;
     }
 
-    public function onRun(int $currentTicks){
+    public function onRun(int $currentTick){
         if($this->player->isOnline()){
             $this->getOwner()->getListener()->setAnswering($this->player->getName(), false);
             $this->getOwner()->getCurrentGame()->checkAnswer($this->answer, $this->player, $this->getOwner());
