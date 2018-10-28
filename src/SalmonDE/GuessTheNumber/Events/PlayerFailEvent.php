@@ -7,8 +7,6 @@ use SalmonDE\GuessTheNumber\Main;
 
 class PlayerFailEvent extends GuessTheNumberEvent {
 
-    static public $handlerList = null;
-
     private $player;
     private $answer;
 

@@ -4,24 +4,25 @@ declare(strict_types = 1);
 namespace SalmonDE\GuessTheNumber\Tasks;
 
 use pocketmine\Player;
-use pocketmine\scheduler\PluginTask;
+use pocketmine\scheduler\Task;
 use SalmonDE\GuessTheNumber\Main;
 
-class AnswerCheckTask extends PluginTask {
+class AnswerCheckTask extends Task {
 
+    private $owner;
     private $player;
     private $number;
 
     public function __construct(Main $owner, Player $player, string $answer){
-        parent::__construct($owner);
+        $this->owner = $owner;
         $this->player = $player;
         $this->answer = $answer;
     }
 
-    public function onRun(int $currentTick){
+    public function onRun(int $currentTick): void{
         if($this->player->isOnline()){
-            $this->getOwner()->getListener()->setAnswering($this->player->getName(), false);
-            $this->getOwner()->getCurrentGame()->checkAnswer($this->answer, $this->player, $this->getOwner());
+            $this->owner->getListener()->setAnswering($this->player->getName(), false);
+            $this->owner->getCurrentGame()->checkAnswer($this->answer, $this->player, $this->owner);
         }
     }
 }

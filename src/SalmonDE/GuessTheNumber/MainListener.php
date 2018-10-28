@@ -30,7 +30,7 @@ class MainListener implements Listener {
         return $this->answeringPlayers[strtolower($name)] ?? false;
     }
 
-    public function setAnswering(string $name, bool $value = true){
+    public function setAnswering(string $name, bool $value = true): void{
         $this->answeringPlayers[strtolower($name)] = $value;
 
         if(!$value){
@@ -45,7 +45,7 @@ class MainListener implements Listener {
     /**
      * @priority MONITOR
      */
-    public function onChat(PlayerChatEvent $event){
+    public function onChat(PlayerChatEvent $event): void{
         if($event->isCancelled()){
             return;
         }
@@ -64,7 +64,7 @@ class MainListener implements Listener {
                     $this->owner->getServer()->getPluginManager()->callEvent($answerEvent = new PlayerAnswerEvent($this->owner, $this->owner->getCurrentGame(), $event->getPlayer(), $event->getMessage()));
 
                     if(!$answerEvent->isCancelled()){
-                        $this->owner->getServer()->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this->owner, $event->getPlayer(), $event->getMessage()), $this->owner->getTimer());
+                        $this->owner->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this->owner, $event->getPlayer(), $event->getMessage()), $this->owner->getTimer());
                         $this->setAnswering($event->getPlayer()->getName());
 
                         $event->getPlayer()->sendMessage(TF::GOLD.$this->owner->getMessage('general.checking', TF::AQUA.($this->owner->getTimer() / 20).TF::GOLD).TF::RESET);
@@ -83,7 +83,7 @@ class MainListener implements Listener {
     /**
      * @priority MONITOR
      */
-    public function onJoin(PlayerJoinEvent $event){
+    public function onJoin(PlayerJoinEvent $event): void{
         if($this->owner->isGameRunning()){
             $this->owner->getCurrentGame()->announceGame($this->owner, [$event->getPlayer()]);
         }
@@ -92,7 +92,7 @@ class MainListener implements Listener {
     /**
      * @priority MONITOR
      */
-    public function onGameStart(NumberGameStartEvent $event){
+    public function onGameStart(NumberGameStartEvent $event): void{
         if(!$event->isCancelled()){
             $this->owner->getLogger()->notice($event->getGame()->getAnnounceMessage($this->owner));
         }
@@ -100,12 +100,12 @@ class MainListener implements Listener {
 
     /**
      * @priority MONITOR
+     * @
      */
-    public function onPlayerWin(PlayerWinEvent $event){
+    public function onPlayerWin(PlayerWinEvent $event): void{
         if(!$event->isCancelled()){
             $msg = TF::GREEN.$this->owner->getMessage('answer.right', $event->getPlayer()->getDisplayName(), $event->getAnswer());
             $this->owner->getLogger()->notice($msg);
         }
     }
-
 }

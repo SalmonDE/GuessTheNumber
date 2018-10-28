@@ -37,9 +37,9 @@ abstract class NumberGame {
         }
     }
 
-    abstract public function initGame();
+    abstract public function initGame(): void;
 
-    abstract public function resetGame();
+    abstract public function resetGame(): void;
 
     abstract public function getExample(): string;
 
@@ -52,7 +52,7 @@ abstract class NumberGame {
         return $msg;
     }
 
-    public function announceGame(Main $plugin, array $recipients = null){
+    public function announceGame(Main $plugin, array $recipients = null): void{
         $msg = $this->getAnnounceMessage($plugin);
 
         $sound = new ClickSound(new Vector3());
@@ -63,7 +63,7 @@ abstract class NumberGame {
             $sound->z = $player->z;
 
             $player->getLevel()->addSound($sound, [$player]);
-            $player->addTitle('', TF::GOLD.$this->getName(), 10, 40, 20);
+            $player->addTitle(TF::YELLOW.'GuessTheNumber', TF::GOLD.$this->getName(), 10, 40, 20);
             $player->sendMessage($msg);
         }
     }
@@ -140,7 +140,7 @@ abstract class NumberGame {
         return false;
     }
 
-    protected function broadcastWinner(Player $player, string $answer, Main $plugin){
+    protected function broadcastWinner(Player $player, string $answer, Main $plugin): void{
         $msg = TF::GREEN.$plugin->getMessage('answer.right', $player->getDisplayName(), $answer);
 
         $sound = new FizzSound(new Vector3());
@@ -159,11 +159,11 @@ abstract class NumberGame {
         return ((string) $this->solution) == ((string) $answer);
     }
 
-    public function setItemPrizes(array $itemPrizes){
+    public function setItemPrizes(array $itemPrizes): void{
         $this->itemPrizes = $itemPrizes;
     }
 
-    public function givePrizes(Player $player, Main $plugin){
+    public function givePrizes(Player $player, Main $plugin): void{
         $prizeListMessage = TF::GREEN.TF::BOLD.$plugin->getMessage('prizeList.header').TF::RESET;
 
         foreach($this->itemPrizes as $itemPrize){
@@ -174,5 +174,4 @@ abstract class NumberGame {
 
         $player->sendMessage($prizeListMessage);
     }
-
 }

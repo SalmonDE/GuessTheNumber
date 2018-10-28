@@ -15,7 +15,7 @@ class MultiplicationGame extends NumberGame {
         $this->secondIntMax = &$this->firstIntMax;
     }
 
-    public function initGame(){
+    public function initGame(): void{
         $this->firstInt = random_int($this->firstIntMin, $this->firstIntMax);
         $this->secondInt = random_int($this->secondIntMin, $this->secondIntMax);
 
@@ -23,7 +23,7 @@ class MultiplicationGame extends NumberGame {
         $this->solution = $this->firstInt * $this->secondInt;
     }
 
-    public function resetGame(){
+    public function resetGame(): void{
         $this->firstInt = null;
         $this->secondInt = null;
     }
@@ -31,13 +31,12 @@ class MultiplicationGame extends NumberGame {
     public function getExample(): string{
         do{
             $firstInt = random_int($this->firstIntMin, $this->firstIntMax);
-        }while($firstInt == $this->firstInt);
+        }while($firstInt === $this->firstInt);
 
         do{
             $secondInt = random_int($this->secondIntMin, $this->secondIntMax);
-        }while($secondInt == $this->secondInt);
+        }while($secondInt === $this->secondInt);
 
         return $firstInt.' * '.$secondInt.' = '.($firstInt * $secondInt);
     }
-
 }
