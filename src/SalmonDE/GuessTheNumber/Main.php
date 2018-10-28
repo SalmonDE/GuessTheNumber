@@ -30,7 +30,7 @@ class Main extends PluginBase {
     private $answeringPlayers = [];
     private $gameTypes = [];
 
-    public function onEnable(){
+    public function onEnable(): void{
         $this->saveResource('config.yml');
         $this->saveResource('eng.ini'); // fallback
         $this->saveResource($this->getConfig()->get('language').'.ini');
@@ -48,7 +48,7 @@ class Main extends PluginBase {
         $this->getServer()->getPluginManager()->registerEvents($this->listener ?? $this->listener = new MainListener($this), $this);
     }
 
-    private function registerGames(){
+    private function registerGames(): void{
         $allPrizes = $this->getConfig()->get('prizes');
 
         $name = $this->getMessage('game.randomInteger');
@@ -84,7 +84,7 @@ class Main extends PluginBase {
         $name = $this->getMessage('game.division');
         $options = $this->getConfig()->get('division');
         $prizes = $allPrizes['divisionItems'];
-        
+
         $this->registerGame(DivisionGame::class, $name, $options, $prizes, 'guessthenumber.play.division', 'guessthenumber.cmd.division');
 
         $name = $this->getMessage('game.factorial');
@@ -121,7 +121,7 @@ class Main extends PluginBase {
         if(!$event->isCancelled()){
             $game->announceGame($this);
             $this->currentGame = $game;
-            
+
             return true;
         }
 
@@ -134,7 +134,7 @@ class Main extends PluginBase {
         if($this->isGameRunning()){
             $this->getServer()->getPluginManager()->callEvent(new NumberGameStopEvent($this, $this->getCurrentGame()));
 
-            $this->getServer()->getScheduler()->cancelTasks($this);
+            $this->getScheduler()->cancelAllTasks();
             $this->answeringPlayers = [];
 
             $this->getServer()->broadcastMessage(TF::GOLD.$this->getMessage('general.game.stop'));
@@ -160,7 +160,7 @@ class Main extends PluginBase {
         return $this->getGameByName($name) instanceof NumberGame;
     }
 
-    public function getGameByName(string $name){
+    public function getGameByName(string $name): ?NumberGame{
         return $this->gameTypes[str_replace(' ', '', strtolower($name))] ?? null;
     }
 

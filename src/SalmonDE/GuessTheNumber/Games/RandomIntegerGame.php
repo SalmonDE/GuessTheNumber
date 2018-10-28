@@ -15,12 +15,12 @@ class RandomIntegerGame extends NumberGame {
         $this->firstIntMax = (int) $options['max'];
     }
 
-    public function initGame(){
+    public function initGame(): void{
         $this->solution = random_int($this->firstIntMin, $this->firstIntMax);
         $this->firstInt = &$this->solution;
     }
 
-    public function resetGame(){
+    public function resetGame(): void{
         $this->solution = null;
         $this->firstInt = null;
     }
@@ -36,5 +36,4 @@ class RandomIntegerGame extends NumberGame {
 
         return $msg;
     }
-
 }

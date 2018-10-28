@@ -73,7 +73,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
         return true;
     }
 
-    protected function startGame(string $gameName, CommandSender $sender){
+    protected function startGame(string $gameName, CommandSender $sender): void{
         if(!$this->getPlugin()->isGameRunning()){
             $game = $this->getPlugin()->getGameByName($gameName);
 
@@ -83,7 +83,7 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
         }
     }
 
-    public function updateAvailableGames(){
+    public function updateAvailableGames(): void{
         $gameNames = '';
 
         foreach($this->getPlugin()->getGames() as $game){
@@ -92,5 +92,4 @@ class NumberGameCmd extends PluginCommand implements CommandExecutor {
 
         $this->setUsage('/numbergame <'.$gameNames.'solution|abort>');
     }
-
 }
