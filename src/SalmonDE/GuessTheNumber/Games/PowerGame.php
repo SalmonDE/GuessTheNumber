@@ -40,7 +40,7 @@ class PowerGame extends NumberGame {
 			$secondInt = random_int($this->secondIntMin, $this->secondIntMax);
 		}while($secondInt === $this->secondInt);
 
-		return '('.$firstInt.')^'.$secondInt.' = '.($firstInt ** $secondInt);
+		return $firstInt.'^'.$secondInt.' = '.($firstInt ** $secondInt);
 	}
 
 }
