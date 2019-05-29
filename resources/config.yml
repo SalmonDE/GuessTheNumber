@@ -17,8 +17,8 @@ prizes:
     # Prizes which the winner gets for a '/numbergame random' quiz (random integer)
     randomIntegerItems: ['265:0:10']
 
-    # Prizes which the winner gets for a '/numbergame exponent' quiz (exponent)
-    exponentItems: ['322:0:1']
+    # Prizes which the winner gets for a '/numbergame power' quiz (power)
+    powerItems: ['322:0:1']
 
     # Prizes which the winner gets for a '/numbergame addition' quiz (addition)
     additionItems: ['351:4:22']
@@ -41,15 +41,15 @@ randomInteger:
     min: 1
     max: 100
 
-# (base)^exponent
+# base^exponent
 # Example:
 # base = 5
 # exponent = 2
 #
-# (5)^2 = 25
-exponent:
-    exponentMin: 0
-    exponentMax: 4
+# 5^2 = 25
+power:
+    powerMin: 0
+    powerMax: 4
     baseIntMin: 1
     baseIntMax: 20
 

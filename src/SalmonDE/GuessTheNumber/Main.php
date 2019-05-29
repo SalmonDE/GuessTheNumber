@@ -13,7 +13,7 @@ use SalmonDE\GuessTheNumber\Events\NumberGameStartEvent;
 use SalmonDE\GuessTheNumber\Events\NumberGameStopEvent;
 use SalmonDE\GuessTheNumber\Games\AdditionGame;
 use SalmonDE\GuessTheNumber\Games\DivisionGame;
-use SalmonDE\GuessTheNumber\Games\ExponentGame;
+use SalmonDE\GuessTheNumber\Games\PowerGame;
 use SalmonDE\GuessTheNumber\Games\FactorialGame;
 use SalmonDE\GuessTheNumber\Games\MultiplicationGame;
 use SalmonDE\GuessTheNumber\Games\NumberGame;
@@ -58,11 +58,11 @@ class Main extends PluginBase {
 
 		$this->registerGame(RandomIntegerGame::class, $name, $options, $prizes, 'guessthenumber.play.randomint', 'guessthenumber.cmd.randomint');
 
-		$name = $this->getMessage('game.exponent');
-		$options = $this->getConfig()->get('exponent');
-		$prizes = $allPrizes['exponentItems'];
+		$name = $this->getMessage('game.power');
+		$options = $this->getConfig()->get('power');
+		$prizes = $allPrizes['powerItems'];
 
-		$this->registerGame(ExponentGame::class, $name, $options, $prizes, 'guessthenumber.play.exponent', 'guessthenumber.cmd.exponent');
+		$this->registerGame(PowerGame::class, $name, $options, $prizes, 'guessthenumber.play.power', 'guessthenumber.cmd.power');
 
 		$name = $this->getMessage('game.addition');
 		$options = $this->getConfig()->get('addition');

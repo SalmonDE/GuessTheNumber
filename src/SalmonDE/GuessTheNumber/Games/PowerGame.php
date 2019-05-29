@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace SalmonDE\GuessTheNumber\Games;
 
-class ExponentGame extends NumberGame {
+class PowerGame extends NumberGame {
 
 	public function __construct(string $name, array $options, array $prizes, string $playPermission, string $startPermission){
 		parent::__construct($name, $prizes, $playPermission, $startPermission);
@@ -11,16 +11,16 @@ class ExponentGame extends NumberGame {
 		$this->firstIntMin = (int) $options['baseIntMin'];
 		$this->firstIntMax = (int) $options['baseIntMax'];
 
-		$this->secondIntMin = (int) $options['exponentMin'];
-		$this->secondIntMax = (int) $options['exponentMax'];
+		$this->secondIntMin = (int) $options['powerMin'];
+		$this->secondIntMax = (int) $options['powerMax'];
 	}
 
 	public function initGame(): void{
 		$this->firstInt = random_int($this->firstIntMin, $this->firstIntMax); // base
 		$this->secondInt = random_int($this->secondIntMin, $this->secondIntMax); // exponent
 
-		$this->calculation = "({$this->firstInt})^{$this->secondInt}";
-		$this->solution = $this->firstInt ** $this->secondInt;
+		$this->calculation = "{$this->firstInt}^{$this->secondInt}";
+		$this->solution = $this->firstInt ** $this->secondInt; //power
 	}
 
 	public function resetGame(): void{
