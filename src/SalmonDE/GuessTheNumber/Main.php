@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace SalmonDE\GuessTheNumber;
 
 use InvalidStateException;
-use pocketmine\lang\BaseLang;
+use pocketmine\lang\Language;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\TextFormat as TF;
 use SalmonDE\GuessTheNumber\Commands\NumberGameCmd;
@@ -24,7 +24,7 @@ class Main extends PluginBase {
 
 	private $currentGame = null;
 	private $timer = 60;
-	private $baseLang;
+	private $language;
 	private $decimalMark = '.';
 	private $thousandSeparator = ',';
 	private $listener = null;
@@ -37,10 +37,10 @@ class Main extends PluginBase {
 		$this->saveResource($this->getConfig()->get('language').'.ini');
 
 		$this->timer = (int) $this->getConfig()->get('timer') * 20;
-		$this->baseLang = new BaseLang($this->getConfig()->get('language'), $this->getDataFolder(), 'eng');
+		$this->language = new Language($this->getConfig()->get('language'), $this->getDataFolder(), 'eng');
 
-		$this->decimalMark = $this->baseLang->get('chat.decimalMark');
-		$this->thousandSeparator = $this->baseLang->get('chat.thousandSeparator');
+		$this->decimalMark = $this->language->get('chat.decimalMark');
+		$this->thousandSeparator = $this->language->get('chat.thousandSeparator');
 
 		$this->getServer()->getCommandMap()->register('guessthenumber', new NumberGameCmd($this), 'numbergame');
 
@@ -182,7 +182,7 @@ class Main extends PluginBase {
 	}
 
 	public function getMessage(string $index, ...$args): string{
-		return $this->baseLang->translateString($index, $args);
+		return $this->language->translateString($index, $args);
 	}
 
 	public function getDecimalMark(): string{
