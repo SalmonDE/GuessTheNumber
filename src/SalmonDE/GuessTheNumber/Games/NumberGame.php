@@ -119,7 +119,7 @@ abstract class NumberGame {
 
 	public function checkAnswer(string $answer, Player $player, Main $plugin): bool{
 		if($this->isSolution($answer)){
-			$plugin->getServer()->getPluginManager()->callEvent($event = new PlayerWinEvent($plugin, $this, $player, $answer));
+			($event = new PlayerWinEvent($plugin, $this, $player, $answer))->call();
 
 			if(!$event->isCancelled()){
 				$this->broadcastWinner($player, $answer, $plugin);
@@ -129,7 +129,7 @@ abstract class NumberGame {
 			}
 		}
 
-		$plugin->getServer()->getPluginManager()->callEvent(new PlayerFailEvent($plugin, $this, $player, $answer));
+		(new PlayerFailEvent($plugin, $this, $player, $answer))->call();
 
 		$player->sendMessage(TF::RED.$plugin->getMessage('answer.wrong'));
 		$player->getWorld()->addSound($player->asVector3(), new AnvilFallSound(), [$player]);

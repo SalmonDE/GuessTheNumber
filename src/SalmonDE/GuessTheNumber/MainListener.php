@@ -61,7 +61,7 @@ class MainListener implements Listener {
 				if($this->isAnswering($event->getPlayer()->getName())){
 					$event->getPlayer()->sendMessage(TF::RED.$this->owner->getMessage('general.alreadyChecking'));
 				}else{
-					$this->owner->getServer()->getPluginManager()->callEvent($answerEvent = new PlayerAnswerEvent($this->owner, $this->owner->getCurrentGame(), $event->getPlayer(), $event->getMessage()));
+					($answerEvent = new PlayerAnswerEvent($this->owner, $this->owner->getCurrentGame(), $event->getPlayer(), $event->getMessage()))->call();
 
 					if(!$answerEvent->isCancelled()){
 						$this->owner->getScheduler()->scheduleDelayedTask($task = new AnswerCheckTask($this->owner, $event->getPlayer(), $event->getMessage()), $this->owner->getTimer());

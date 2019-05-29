@@ -98,7 +98,7 @@ class Main extends PluginBase {
 	public function registerGame(string $class, string $name, array $options, array $prizes = [], string $playPermission = 'guessthenumber.play', string $startPermission = 'guessthenumber.cmd'): bool{
 		$game = new $class($name, $options, $prizes, $playPermission, $startPermission);
 
-		$this->getServer()->getPluginManager()->callEvent($event = new NumberGameRegisterEvent($this, $game));
+		($event = new NumberGameRegisterEvent($this, $game))->call();
 
 		if(!$event->isCancelled()){
 			$this->gameTypes[str_replace(' ', '', strtolower($name))] = $game;
@@ -117,7 +117,7 @@ class Main extends PluginBase {
 
 		$game->initGame();
 
-		$this->getServer()->getPluginManager()->callEvent($event = new NumberGameStartEvent($this, $game));
+		($event = new NumberGameStartEvent($this, $game))->call();
 
 		if(!$event->isCancelled()){
 			$game->announceGame($this);
@@ -133,7 +133,7 @@ class Main extends PluginBase {
 
 	public function stopGame(): bool{
 		if($this->isGameRunning()){
-			$this->getServer()->getPluginManager()->callEvent(new NumberGameStopEvent($this, $this->getCurrentGame()));
+			(new NumberGameStopEvent($this, $this->getCurrentGame()))->call();
 
 			$this->getScheduler()->cancelAllTasks();
 			$this->answeringPlayers = [];
