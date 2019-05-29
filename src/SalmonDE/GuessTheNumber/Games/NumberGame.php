@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace SalmonDE\GuessTheNumber\Games;
 
-use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
 use pocketmine\world\sound\AnvilFallSound;
 use pocketmine\world\sound\ClickSound;
 use pocketmine\world\sound\FizzSound;
@@ -34,7 +34,7 @@ abstract class NumberGame {
 		$this->startPermission = $startPermission;
 
 		foreach($prizes as $itemString){
-			$this->itemPrizes[] = Item::get(...explode(':', $itemString));
+			$this->itemPrizes[] = ItemFactory::fromString($itemString);
 		}
 	}
 
