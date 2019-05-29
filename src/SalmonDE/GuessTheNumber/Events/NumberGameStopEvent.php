@@ -6,7 +6,7 @@ use SalmonDE\GuessTheNumber\Main;
 
 class NumberGameStopEvent extends GuessTheNumberEvent {
 
-    public function __construct(Main $plugin, NumberGame $game){
-        parent::__construct($plugin, $game);
-    }
+	public function __construct(Main $plugin, NumberGame $game){
+		parent::__construct($plugin, $game);
+	}
 }

@@ -7,7 +7,7 @@ use SalmonDE\GuessTheNumber\Main;
 
 class NumberGameRegisterEvent extends GuessTheNumberEvent implements Cancellable {
 
-    public function __construct(Main $plugin, NumberGame $game){
-        parent::__construct($plugin, $game);
-    }
+	public function __construct(Main $plugin, NumberGame $game){
+		parent::__construct($plugin, $game);
+	}
 }

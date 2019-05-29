@@ -7,14 +7,14 @@ use SalmonDE\GuessTheNumber\Main;
 
 class GuessTheNumberEvent extends PluginEvent {
 
-    private $game;
+	private $game;
 
-    public function __construct(Main $plugin, NumberGame $game){
-        parent::__construct($plugin);
-        $this->game = $game;
-    }
+	public function __construct(Main $plugin, NumberGame $game){
+		parent::__construct($plugin);
+		$this->game = $game;
+	}
 
-    public function getGame(): NumberGame{
-        return $this->game;
-    }
+	public function getGame(): NumberGame{
+		return $this->game;
+	}
 }
