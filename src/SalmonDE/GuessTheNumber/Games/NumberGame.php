@@ -2,10 +2,9 @@
 namespace SalmonDE\GuessTheNumber\Games;
 
 use pocketmine\item\Item;
-use pocketmine\level\sound\AnvilFallSound;
-use pocketmine\level\sound\ClickSound;
-use pocketmine\level\sound\FizzSound;
-use pocketmine\math\Vector3;
+use pocketmine\world\sound\AnvilFallSound;
+use pocketmine\world\sound\ClickSound;
+use pocketmine\world\sound\FizzSound;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat as TF;
 use SalmonDE\GuessTheNumber\Events\PlayerFailEvent;
@@ -55,14 +54,10 @@ abstract class NumberGame {
 	public function announceGame(Main $plugin, array $recipients = null): void{
 		$msg = $this->getAnnounceMessage($plugin);
 
-		$sound = new ClickSound(new Vector3());
+		$sound = new ClickSound();
 
 		foreach($recipients ?? $plugin->getServer()->getOnlinePlayers() as $player){
-			$sound->x = $player->z;
-			$sound->y = $player->z;
-			$sound->z = $player->z;
-
-			$player->getLevel()->addSound($sound, [$player]);
+			$player->getWorld()->addSound($player->asVector3(), $sound, [$player]);
 			$player->addTitle(TF::YELLOW.'GuessTheNumber', TF::GOLD.$this->getName(), 10, 40, 20);
 			$player->sendMessage($msg);
 		}
@@ -135,7 +130,7 @@ abstract class NumberGame {
 		$plugin->getServer()->getPluginManager()->callEvent(new PlayerFailEvent($plugin, $this, $player, $answer));
 
 		$player->sendMessage(TF::RED.$plugin->getMessage('answer.wrong'));
-		$player->getLevel()->addSound(new AnvilFallSound($player), [$player]);
+		$player->getWorld()->addSound($player->asVector3(), new AnvilFallSound(), [$player]);
 
 		return false;
 	}
@@ -143,15 +138,11 @@ abstract class NumberGame {
 	protected function broadcastWinner(Player $player, string $answer, Main $plugin): void{
 		$msg = TF::GREEN.$plugin->getMessage('answer.right', $player->getDisplayName(), $answer);
 
-		$sound = new FizzSound(new Vector3());
+		$sound = new FizzSound();
 
 		foreach($plugin->getServer()->getOnlinePlayers() as $p){
-			$sound->x = $p->x;
-			$sound->y = $p->y;
-			$sound->z = $p->z;
-
 			$p->sendMessage($msg);
-			$p->getLevel()->addSound($sound, [$p]);
+			$p->getWorld()->addSound($p->asVector3(), $sound, [$p]);
 		}
 	}
 
