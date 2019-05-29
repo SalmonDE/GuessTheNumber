@@ -60,7 +60,7 @@ abstract class NumberGame {
 
 		foreach($recipients ?? $plugin->getServer()->getOnlinePlayers() as $player){
 			$player->getWorld()->addSound($player->asVector3(), $sound, [$player]);
-			$player->addTitle(TF::YELLOW.'GuessTheNumber', TF::GOLD.$this->getName(), 10, 40, 20);
+			$player->sendTitle(TF::YELLOW.'GuessTheNumber', TF::GOLD.$this->getName(), 10, 40, 20);
 			$player->sendMessage($msg);
 		}
 	}
