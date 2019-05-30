@@ -34,7 +34,8 @@ abstract class NumberGame {
 		$this->startPermission = $startPermission;
 
 		foreach($prizes as $itemString){
-			$this->itemPrizes[] = ItemFactory::fromString($itemString);
+			$count = (int) explode(':', $itemString)[2] ?? 1;
+			$this->itemPrizes[] = (ItemFactory::fromString($itemString))->setCount($count);
 		}
 	}
 
