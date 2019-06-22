@@ -7,7 +7,7 @@ use pocketmine\item\ItemFactory;
 use pocketmine\world\sound\AnvilFallSound;
 use pocketmine\world\sound\ClickSound;
 use pocketmine\world\sound\FizzSound;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat as TF;
 use SalmonDE\GuessTheNumber\Events\PlayerFailEvent;
 use SalmonDE\GuessTheNumber\Events\PlayerWinEvent;

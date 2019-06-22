@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace SalmonDE\GuessTheNumber\Tasks;
 
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\scheduler\Task;
 use SalmonDE\GuessTheNumber\Main;
 
