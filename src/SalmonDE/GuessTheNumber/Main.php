@@ -31,7 +31,7 @@ class Main extends PluginBase {
 	private $answeringPlayers = [];
 	private $gameTypes = [];
 
-	public function onEnable(): void{
+	protected function onEnable(): void{
 		$this->saveResource('config.yml');
 		$this->saveResource('eng.ini'); // fallback
 		$this->saveResource($this->getConfig()->get('language').'.ini');
