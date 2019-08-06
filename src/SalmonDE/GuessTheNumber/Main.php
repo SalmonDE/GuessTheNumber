@@ -122,6 +122,7 @@ class Main extends PluginBase {
 		if(!$event->isCancelled()){
 			$game->announceGame($this);
 			$this->currentGame = $game;
+			$this->answeringPlayers = [];
 
 			return true;
 		}
