@@ -60,7 +60,7 @@ abstract class NumberGame {
 		$sound = new ClickSound();
 
 		foreach($recipients ?? $plugin->getServer()->getOnlinePlayers() as $player){
-			$player->getWorld()->addSound($player->asVector3(), $sound, [$player]);
+			$player->getWorld()->addSound($player->getPosition()->asVector3(), $sound, [$player]);
 			$player->sendTitle(TF::YELLOW.'GuessTheNumber', TF::GOLD.$this->getName(), 10, 40, 20);
 			$player->sendMessage($msg);
 		}
@@ -133,7 +133,7 @@ abstract class NumberGame {
 		(new PlayerFailEvent($plugin, $this, $player, $answer))->call();
 
 		$player->sendMessage(TF::RED.$plugin->getMessage('answer.wrong'));
-		$player->getWorld()->addSound($player->asVector3(), new AnvilFallSound(), [$player]);
+		$player->getWorld()->addSound($player->getPosition()->asVector3(), new AnvilFallSound(), [$player]);
 
 		return false;
 	}

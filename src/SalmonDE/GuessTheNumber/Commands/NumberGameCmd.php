@@ -14,8 +14,7 @@ use SalmonDE\GuessTheNumber\Main;
 class NumberGameCmd extends PluginCommand implements CommandExecutor {
 
 	public function __construct(Main $owner){
-		parent::__construct('numbergame', $owner);
-		$this->setExecutor($this);
+		parent::__construct('numbergame', $owner, $this);
 		$this->setPermission('guessthenumber.cmd');
 
 		$gameNames = '';
