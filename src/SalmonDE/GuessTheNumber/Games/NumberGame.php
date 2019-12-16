@@ -145,7 +145,7 @@ abstract class NumberGame {
 
 		foreach($plugin->getServer()->getOnlinePlayers() as $p){
 			$p->sendMessage($msg);
-			$p->getWorld()->addSound($p->asVector3(), $sound, [$p]);
+			$p->getWorld()->addSound($p->getPosition()->asVector3(), $sound, [$p]);
 		}
 	}
 
