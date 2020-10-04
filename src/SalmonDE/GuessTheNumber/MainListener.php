@@ -71,10 +71,8 @@ class MainListener implements Listener {
 					}
 				}
 
-				if($answerEvent ?? false){
-					$event->setCancelled(!$answerEvent->showChatMessage());
-				}else{
-					$event->setCancelled();
+				if(!$answerEvent->showChatMessage()){
+					$event->cancel();
 				}
 			}
 		}

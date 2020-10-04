@@ -19,7 +19,7 @@ class AnswerCheckTask extends Task {
 		$this->answer = $answer;
 	}
 
-	public function onRun(int $currentTick): void{
+	public function onRun(): void{
 		if($this->player->isOnline()){
 			$this->owner->getListener()->setAnswering($this->player->getName(), false);
 			$this->owner->getCurrentGame()->checkAnswer($this->answer, $this->player, $this->owner);
