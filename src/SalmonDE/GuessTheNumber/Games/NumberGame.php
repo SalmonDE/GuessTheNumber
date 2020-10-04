@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace SalmonDE\GuessTheNumber\Games;
 
-use pocketmine\item\ItemFactory;
+use pocketmine\item\LegacyStringToItemParser;
 use pocketmine\world\sound\AnvilFallSound;
 use pocketmine\world\sound\ClickSound;
 use pocketmine\world\sound\FizzSound;
@@ -33,9 +33,10 @@ abstract class NumberGame {
 		$this->playPermission = $playPermission;
 		$this->startPermission = $startPermission;
 
+		$itemParser = LegacyStringToItemParser::getInstance();
 		foreach($prizes as $itemString){
 			$count = (int) (explode(':', $itemString)[2] ?? 1);
-			$this->itemPrizes[] = (ItemFactory::fromString($itemString))->setCount($count);
+			$this->itemPrizes[] = ($itemParser->parse($itemString))->setCount($count);
 		}
 	}
 
